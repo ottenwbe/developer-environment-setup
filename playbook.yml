@@ -1,0 +1,30 @@
+---
+- hosts: all  
+  tasks:
+  - name: Update packages with apt
+    apt:
+      update_cache: yes
+    when: ansible_os_family == "Debian" 
+  - name: Upgrade all packages    
+    package: name=* state=latest   
+    when: ansible_os_family != "Debian" 
+  - name: Install development language specific tools
+    package: name=make state=present                  
+    package: name=clang state=present
+    package: name=python state=present
+    package: name=ruby state=present    
+    package: name=golang state=present        
+  - name: Install development tools
+    package: name=git state=present  
+    package: name=gradle state=present      
+    package: name=maven state=present          
+    package: name=cmake state=present          
+  - name: Install development ide
+    package: name=eclipse state=present  
+    package: name=geany state=present      
+  #- name: Install office tools
+    #package: name=libreoffice state=present  
+    #package: name=evince state=present   
+  #- name: Install alternative desktops
+    #package: name=cinnamon state=present   
+
