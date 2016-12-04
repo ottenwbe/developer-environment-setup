@@ -1,14 +1,6 @@
 
-
-
-Hanguage: s
-
-
-go:
-  before_script:
-  # static code analysis
-  - go vet
+language: sh
 
 script:
   # unit tests
-  - go test
+  - sh test.sh
