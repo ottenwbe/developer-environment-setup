@@ -1,0 +1,14 @@
+
+
+
+Hanguage: s
+
+
+go:
+  before_script:
+  # static code analysis
+  - go vet
+
+script:
+  # unit tests
+  - go test
