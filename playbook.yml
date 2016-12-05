@@ -1,30 +1,54 @@
 ---
-- hosts: all  
+- hosts: all 
+  become: true 
+  ignore_errors: true
   tasks:
-  - name: Update packages with apt
+  - name: Upgrade apt cache and packages
     apt:
+      upgrade: yes
       update_cache: yes
-    when: ansible_os_family == "Debian" 
-  - name: Upgrade all packages    
-    package: name=* state=latest   
-    when: ansible_os_family != "Debian" 
-  - name: Install development language specific tools
-    package: name=make state=present                  
-    package: name=clang state=present
-    package: name=python state=present
-    package: name=ruby state=present    
-    package: name=golang state=present        
-  - name: Install development tools
-    package: name=git state=present  
-    package: name=gradle state=present      
-    package: name=maven state=present          
-    package: name=cmake state=present          
+    when: 
+      ansible_os_family == "Debian" 
+  - name: Upgrade all (non apt managed) packages    
+    package: 
+      name=* state=latest   
+    when: 
+      ansible_os_family != "Debian"     
+  - name: Install development language tools
+    package: name={{ item }} state=latest
+    with_items:
+      - make
+      - clang
+      #- clang-analyzer
+      - python
+      - ruby
+      - golang
+  - name: Install tools
+    package: name={{ item }} state=latest
+    with_items:
+      - curl
+      - keepassx
+      - doxygen            
+  - name: Install build tools
+    package: name={{ item }} state=latest
+    with_items:
+      - git
+      - gradle
+      - maven
+      - cmake      
   - name: Install development ide
-    package: name=eclipse state=present  
-    package: name=geany state=present      
-  #- name: Install office tools
-    #package: name=libreoffice state=present  
-    #package: name=evince state=present   
-  #- name: Install alternative desktops
-    #package: name=cinnamon state=present   
+    package: name={{ item }} state=latest
+    with_items:
+      - vim
+      - eclipse
+      - geany
+  - name: Install office tools
+    package: name={{ item }} state=latest  
+    with_items:
+      - evince
+      - libreoffice
+  - name: Install desktops and desktop utilities
+    package: name={{ item }} state=latest   
+    with_items:
+      - cinnamon
 
