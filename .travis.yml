@@ -1,6 +1,5 @@
-
 language: sh
 
 script:
   # unit tests
-  - sh test.sh
+  - sh test/test.sh
