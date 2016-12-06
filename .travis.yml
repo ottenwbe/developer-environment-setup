@@ -1,5 +1,5 @@
-language: sh
+#language: sh
 
-script:
+#script:
   # unit tests
-  - sh test/test.sh
+  #- sh test/test.sh
