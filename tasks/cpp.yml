@@ -1,0 +1,11 @@
+---
+- name: cpp - compiler
+  package: name={{ item }} state=latest
+  with_items:
+    - clang
+    - gcc
+- name: cpp - build tools
+  package: name={{ item }} state=latest
+  with_items:
+    - make
+    - cmake

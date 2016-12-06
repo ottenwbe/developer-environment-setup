@@ -1,0 +1,3 @@
+---
+- name: python - basic install
+  package: name=python state=latest
