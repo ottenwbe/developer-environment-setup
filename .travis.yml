@@ -1,5 +1,16 @@
-#language: sh
-
-#script:
-  # unit tests
-  #- sh test/test.sh
+sudo: required
+dist: trusty
+addons:
+  hosts:
+    - travis-trusty
+language: python
+python: '2.7'
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq python-apt
+install:
+  - pip install ansible
+matrix:
+  fast_finish: true
+script:
+  - sh test/test.sh
