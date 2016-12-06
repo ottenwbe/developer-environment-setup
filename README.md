@@ -1,4 +1,6 @@
-# ansible-laptop-setup
+# developer-environment-setup
+
+[![Build Status](https://travis-ci.org/ottenwbe/developer-environment-setup.svg?branch=master)](https://travis-ci.org/ottenwbe/developer-environment-setup)
 
 Script to setup Linux developer machines/laptops
 
