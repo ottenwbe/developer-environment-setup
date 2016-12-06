@@ -15,18 +15,13 @@ fi
 echo "== SETUP ${system} =="
 if [ "${system}" == "Fedora" ] ; then
 	echo "== Ensure Python =="
-	dnf -y install python2 
-	dnf -y install python2-dnf
+	dnf -y install python2 python2-dnf
 	service sshd start	
 fi
 
 if [ "${system}" == "Ubuntu" ] ; then
 	echo "== Ensure Python =="
-	apt-get install -qq python 
-	apt-get install -qq python-pip
-	apt-get install -qq python-dev 
-	apt-get install -qq build-essential 	
-	apt-get install -qq python-apt
+    apt-get install -y python python-pip python-apt python-dev build-essential libssl-dev libffi-dev python-dev 	
 fi
 
 echo "== INSTALL ANSIBLE =="

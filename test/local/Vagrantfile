@@ -15,13 +15,12 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell" do |s|
   s.inline = <<-SHELL
     sudo apt-get update
-    sudo apt-get install -y git  
+    sudo apt-get install -y git 
     git clone https://github.com/ottenwbe/developer-environment-setup.git
     cd developer-environment-setup    
-    sh bootstrap_local.sh hosts Ubuntu
+    chmod 774 bootstrap_local.sh
+    ./bootstrap_local.sh hosts Ubuntu
   SHELL
-    #s.path = "../../bootstrap_local.sh"
-    #s.args   = ["hosts", "Ubuntu"]
   end
 
   #config.vm.provision "ansible" do |ansible|
