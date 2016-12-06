@@ -1,7 +1,6 @@
 ---
 - hosts: all 
   become: true 
-  ignore_errors: true
   tasks:
   - name: Upgrade apt cache and packages
     apt:
@@ -47,8 +46,3 @@
     with_items:
       - evince
       - libreoffice
-  - name: Install desktops and desktop utilities
-    package: name={{ item }} state=latest   
-    with_items:
-      - cinnamon
-
