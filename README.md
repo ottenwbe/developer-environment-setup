@@ -2,15 +2,17 @@
 
 [![Build Status](https://travis-ci.org/ottenwbe/developer-environment-setup.svg?branch=master)](https://travis-ci.org/ottenwbe/developer-environment-setup)
 
-Script to setup Linux developer machines/laptops
+Ansible playbook to setup Linux developer machines/laptops.
 
-Starting sshd:
-```
-service sshd start
-```
+## Example: Usage on a local Fedora installation
 
-For dnf, install on Fedora:
 ```
-sudo dnf install python2-dnf
+sudo sh bootstrap_local.sh hosts Fedora
 ```
 
+## Testing with Vagrant
+
+```
+cd test/local
+sh test.sh
+```
