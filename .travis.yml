@@ -13,4 +13,4 @@ install:
 matrix:
   fast_finish: true
 script:
-  - sh test/test.sh
+  - ansible-playbook -i testing playbook.yml --connection=local --become
