@@ -13,4 +13,5 @@ install:
 matrix:
   fast_finish: true
 script:
-  - ansible-playbook -i testing playbook.yml --connection=local --become
+  - ansible-playbook -i test/travis-ci/test_hosts --syntax-check playbook.yml
+  - ansible-playbook -i test/travis-ci/test_hosts playbook.yml --connection=local --become

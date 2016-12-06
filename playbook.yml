@@ -2,47 +2,10 @@
 - hosts: all 
   become: true 
   tasks:
-  - name: Upgrade apt cache and packages
-    apt:
-      upgrade: yes
-      update_cache: yes
-    when: 
-      ansible_os_family == "Debian" 
-  - name: Upgrade all (non apt managed) packages    
-    package: 
-      name=* state=latest   
-    when: 
-      ansible_os_family != "Debian"     
-  - name: Install development language tools
-    package: name={{ item }} state=latest
-    with_items:
-      - make
-      - clang
-      #- clang-analyzer
-      - python
-      - ruby
-      - golang
-  - name: Install tools
-    package: name={{ item }} state=latest
-    with_items:
-      - curl
-      - keepassx
-      - doxygen            
-  - name: Install build tools
-    package: name={{ item }} state=latest
-    with_items:
-      - git
-      - gradle
-      - maven
-      - cmake      
-  - name: Install development ide
-    package: name={{ item }} state=latest
-    with_items:
-      - vim
-      - eclipse
-      - geany
-  - name: Install office tools
-    package: name={{ item }} state=latest  
-    with_items:
-      - evince
-      - libreoffice
+  - include: tasks/update.yml         
+  - include: tasks/cpp.yml       
+  - include: tasks/go.yml 
+  - include: tasks/ruby.yml 
+  - include: tasks/python.yml   
+  - include: tasks/java.yml   
+  - include: tasks/tools.yml   
