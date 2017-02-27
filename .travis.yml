@@ -1,17 +1,25 @@
-sudo: required
-dist: trusty
-addons:
-  hosts:
-    - travis-trusty
-language: python
-python: '2.7'
+env:
+  - >
+    container_id=$(mktemp)
+    distribution=ubuntu
+    version=14.04
+    init=/sbin/init
+    run_opts=""
+
+services:
+  - docker
+
 before_install:
-  - sudo apt-get update -qq
-  - sudo apt-get install -qq python-apt
-install:
-  - pip install ansible
-matrix:
-  fast_finish: true
+  - sudo apt-get update
+  - sudo docker pull ${distribution}:${version}
+  - sudo docker build --rm=true --file=test/travis-ci/Dockerfile --tag=${distribution}:ansible tests
+
 script:
-  - ansible-playbook -i test/travis-ci/test_hosts --syntax-check playbook.yml
-  - ansible-playbook -i test/travis-ci/test_hosts playbook.yml --connection=local --become
+    # Run container in detached state
+  - sudo docker run --detach --volume="${PWD}":/etc/ansible/roles/role_under_test:ro ${run_opts} ${distribution}:ansible "${init}" > "${container_id}"
+
+  - sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook -i test/travis-ci/test_hosts --syntax-check playbook.yml
+  - sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook -i test/travis-ci/test_hosts playbook.yml --connection=local --become
+
+    # Clean up
+  - sudo docker stop "$(cat ${container_id})"
