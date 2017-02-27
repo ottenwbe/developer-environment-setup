@@ -2,7 +2,7 @@
 - name: update - apt - cache and packages
   apt:
     upgrade: yes
-    update_cache: yes
+    update_cache: false
   when: 
     ansible_os_family == "Debian" 
 - name: update - non-apt - packages     
