@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/ottenwbe/developer-environment-setup.svg?branch=master)](https://travis-ci.org/ottenwbe/developer-environment-setup)
 
-Ansible playbook to setup Linux developer machines/laptops.
+Ansible playbook to setup Linux developer machines.
 
 ## Usage 
 
@@ -14,7 +14,7 @@ sudo sh bootstrap_local.sh hosts Fedora
 
 On a local Fedora installation where ansible is installed:
 ```sh
-sudo sh bootstrap_local.sh hosts Fedora
+ansible-playbook -i hosts playbook.yml --connection=local
 ```
 
 ## Testing with Vagrant
