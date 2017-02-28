@@ -20,6 +20,6 @@ ansible-playbook -i hosts playbook.yml --connection=local
 ## Testing with Vagrant
 
 ```sh
-cd test/local
+cd test/vagrant
 sh test.sh
 ```
