@@ -17,8 +17,8 @@ script:
     # Run container in detached state
   - sudo docker run --detach --volume="${PWD}":/home/ansible:ro ${distribution}:ansible "${init}" > "${container_id}"
 
-  - sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook -i /home/ansible/test/travis-ci/test_hosts --syntax-check /home/ansible/playbook.yml
-  - sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook -i /home/ansible/test/travis-ci/test_hosts /home/ansible/playbook.yml --connection=local --become
+  - sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook -i /home/ansible/test/docker/test_hosts --syntax-check /home/ansible/playbook.yml
+  - sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook -i /home/ansible/test/docker/test_hosts /home/ansible/playbook.yml --connection=local --become
 
     # Clean up
   - sudo docker stop "$(cat ${container_id})"
