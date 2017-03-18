@@ -1,0 +1,4 @@
+FROM fedora:latest
+# Install Ansible
+RUN dnf -y update
+RUN dnf install -y ansible

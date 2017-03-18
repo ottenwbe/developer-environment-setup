@@ -18,7 +18,7 @@ services:
 before_install:
   - sudo apt-get update
   - sudo docker pull ${distribution}:${version}
-  - sudo docker build --rm=true --file=test/docker/Dockerfile --tag=${distribution}:ansible test/docker
+  - sudo docker build --rm=true --file=test/docker/Dockerfile.${distribution} --tag=${distribution}:ansible test/docker
 
 script:
     # Run container in detached state
