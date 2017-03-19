@@ -55,7 +55,7 @@ sudo docker exec --tty "$(cat cid)" env TERM=xterm ansible-playbook -i test/dock
 
 Similarly you can execute the test for a Fedora system when using Dockerfile.fedora and pulling a fedora image.
 
-After the test you can stop the container:
+After the test has finished you can stop the container:
 ```bash
 sudo docker stop "$(cat cid)"
 ```
