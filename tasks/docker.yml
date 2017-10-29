@@ -1,0 +1,9 @@
+- name: install docker
+  package: 
+    name=docker state=latest   
+- name: (re)start service docker
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    name: docker
+    enabled: yes

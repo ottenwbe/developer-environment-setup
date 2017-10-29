@@ -1,0 +1,13 @@
+---
+- name: Add google repository
+  yum_repository:
+    name: google-chrome
+    description: google-chrome - $basearch
+    gpgcheck: yes
+    enabled: yes
+    gpgkey: https://dl-ssl.google.com/linux/linux_signing_key.pub
+    baseurl: http://dl.google.com/linux/chrome/rpm/stable/$basearch
+- name: install chrome
+  dnf:
+    name: google-chrome-stable
+    state: latest
