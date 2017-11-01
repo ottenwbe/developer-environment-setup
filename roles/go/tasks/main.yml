@@ -1,0 +1,13 @@
+---
+- name: go - basic install
+  become: true
+  package: name=golang state=latest
+- name: go - set GOPATH at startup
+  become: true
+  copy: src="{{ role_path }}/files/go-startup.sh"
+        dest=/etc/profile.d
+# TODO: why is this not working?
+#- name: go - set GOPATH now (and ensure that GOPATH exists)
+#  shell: "{{ role_path }}/files/go.sh"
+- name: go - install dependency management (dep)
+  command: go get -u github.com/golang/dep/cmd/dep

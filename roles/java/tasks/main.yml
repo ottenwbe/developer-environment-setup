@@ -1,0 +1,10 @@
+---
+- name: java - install jdk 8
+  become: true
+  package: name=java-1.8.0-openjdk state=latest
+- name: java - build tools
+  become: true
+  package: name={{ item }} state=present
+  with_items:
+    - maven
+    - gradle

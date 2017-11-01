@@ -1,0 +1,23 @@
+- name: tools - general
+  become: true
+  package: name={{ item }} state=latest
+  with_items:
+    - curl
+    - keepassx
+- name: tools - devel
+  become: true
+  package: name={{ item }} state=latest
+  with_items:
+    - git
+    - eclipse
+    - vagrant
+    - doxygen
+- name: tools - productivity
+  become: true
+  package: name={{ item }} state=latest
+  with_items:
+    - vim
+    - nano
+    - geany
+    - evince
+    - libreoffice

@@ -1,0 +1,24 @@
+---
+- name: ruby - basic install
+  package: name={{ item }} state=latest
+  become: true
+  with_items:
+    - ruby
+    - ruby-devel
+- name: ruby - dependencies for native extensions on Red Hat
+  become: true
+  dnf:
+    name=redhat-rpm-config  state=latest
+  when:
+    ansible_os_family == "RedHat"
+- name: ruby - installation of default gems
+  gem: name={{ item }} state=present
+  with_items:
+    - bundler
+    - rake
+    - rspec
+- name: Update Rubygems
+  command: gem update --system
+  tags:
+    - update
+

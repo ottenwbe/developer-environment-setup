@@ -1,5 +1,0 @@
----
-- name: ruby - basic install
-  package: name=ruby state=latest
-#- name: ruby - build tools
-#  package: name=rake state=latest

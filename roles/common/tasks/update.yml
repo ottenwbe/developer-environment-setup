@@ -1,0 +1,27 @@
+---
+- name: update - capture fedora version
+  command: rpm -E %fedora
+  register: fedora_version
+  when:
+    ansible_distribution  == "Fedora"
+- name: update - install rpmfusion on fedora
+  dnf: name={{ item }} state=latest
+  with_items:
+    - "https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ fedora_version.stdout }}.noarch.rpm"
+    - "https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ fedora_version.stdout }}.noarch.rpm"
+  become: true
+  when:
+    ansible_distribution  == "Fedora"
+- name: update - packages
+  package: 
+    name=* state=latest   
+  become: true
+  when:
+    ansible_distribution  == "Fedora"
+  tags:
+    - update
+
+
+
+
+

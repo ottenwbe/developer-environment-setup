@@ -2,60 +2,89 @@
 
 [![Build Status](https://travis-ci.org/ottenwbe/developer-environment-setup.svg?branch=master)](https://travis-ci.org/ottenwbe/developer-environment-setup)
 
-Ansible playbook to setup Linux developer machines.
+This ansible playbook is used by me to automate the setup of my Linux developer machines. Therefore, this repository will be updated whenever I setup a new machine (commits to master).
+
+## Supported Linux Distributions
+
+Right now the only supported Distribution is:
+* Fedora (26)
+
+Formerly supported:
+* Ubuntu
 
 ## Structure
 
 ```
 .
 ├── bootstrap_local.sh  // Script to bootstrap the ansible environment before executing the playbook
-├── playbook.yml        // Playbook that wraps all tasks
-├── ...
-├── tasks/              // Tasks to be executed by playbook                      
-└── test/               // Test the playbook in vagrant boxes or docker images
+├── site.yml            // Playbook that wraps all tasks, roles, ...
+├── ... 
+├── roles/              // Roles to be executed by the playbook
+│   ├── common          // Installation of common tools, external repos (rpm-fusion...), etc. 
+│   ├── cpp             // Everything needed for C(pp) development
+│   ├── go              // Everything needed for Golang development
+│   ├── java            // Everything needed for Java development
+│   ├── python          // Everything needed for Python development
+│   └── ruby            // Everything needed for Ruby development       
+└── test/               // Test the playbook in docker images
     ├── docker/
-    └── vagrant/
+    └── vagrant/        // [Deprecated] kept for experimental support of other Distros
 ```
 
 ## Usage 
+
+First of all, clone this repository.
+
+```
+    git clone https://github.com/ottenwbe/developer-environment-setup.git
+```
 
 The ```bootstrap_local.sh``` script installs ansible as a prerequisite for executing the playbook.
 On a local Fedora installation where ansible is __not__ installed the playbook can be executed as follows:
 
 ```bash
-sudo sh bootstrap_local.sh hosts Fedora
+sh bootstrap_local.sh hosts <your user> Fedora
 ```
 
 On a local Linux installation where ansible is installed the playbook can be executed as follows:
 ```bash
-ansible-playbook -i hosts playbook.yml --connection=local
+ansible-playbook -i hosts site.yml --connection=local --extra-vars "user=<your user>" --ask-become-pass
 ```
 
 ## Testing 
 
-The playbook can be tested in a Vagrant box or in a Docker container.
+The playbook can be tested in a Docker container---more or less.
 
-### Vagrant
+### Docker
+
+
+__NOTE__: On an selinux, i.e., Fedora, first execute the following command in the root directory of the project.
+
+```bash
+chcon -Rt svirt_sandbox_file_t "${PWD}"
+```
+
+On a non SELinux you can simply build a docker image and execute the playbook in a container:
+
+```bash
+sudo docker build --rm=true --file=test/docker/Dockerfile.fedora --tag=fedora:ansible test/docker
+sudo docker run --detach --volume="${PWD}":/home/ansible:ro fedora:ansible "/sbin/init" > cid
+sudo docker exec --tty "$(cat cid)" env TERM=xterm ansible-playbook -i /home/ansible/test/docker/test_hosts /home/ansible/playbook.yml --connection=local --become --extra-vars "user=<your user>" --skip-tags "systemd"
+```
+
+__Note__: We skip everything related to systemd, since systemd is not monitoring our services in the container.  
+
+After the test has finished you can stop the container:
+```bash
+sudo docker stop "$(cat cid)"
+```
+
+### [Deprecated]: Vagrant
+
+Since Ubuntu is no longer in the focus of this project, tests are mainly focused on Fedora and Docker.
 
 ```bash
 cd test/vagrant
 ./test.sh # Executes vagrant up, halt and destroy 
 ```
 
-### Docker
-
-On a non selinux you can simply pull a docker image, say an Ubuntu image, and execute the playbook in a container:
-
-```bash
-sudo docker pull ubuntu:24
-sudo docker build --rm=true --file=test/docker/Dockerfile.ubuntu --tag=ubuntu:ansible test/docker
-sudo docker run --detach --volume="${PWD}":/home/ansible:ro ubuntu:ansible "/sbin/init" > cid
-sudo docker exec --tty "$(cat cid)" env TERM=xterm ansible-playbook -i test/docker/test_hosts playbook.yml --connection=local --become
-```
-
-Similarly you can execute the test for a Fedora system when using Dockerfile.fedora and pulling a fedora image.
-
-After the test has finished you can stop the container:
-```bash
-sudo docker stop "$(cat cid)"
-```

@@ -1,4 +1,0 @@
----
-- name: go - basic install
-  package: name=golang state=latest
-

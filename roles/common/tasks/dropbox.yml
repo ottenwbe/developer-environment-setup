@@ -1,0 +1,20 @@
+# NOTE: depends on rpm fusion
+- name: dropbox - install
+  become: true
+  dnf:
+    name: dropbox
+    state: present
+
+# Alternatively we could do the following, yet it is not as maintainable as with rpm fusion:
+#- debug:
+#    msg: "Installing dropbox{{ dropbox_version }}"
+#- name: prerequisites for installing dropbox
+#  package: name=libselinux-python state=present
+#- name: downlad dropbox
+#  get_url:
+#    url: https://linux.dropbox.com/packages/fedora/nautilus-dropbox{{ dropbox_version }}.rpm
+#    dest: /tmp/nautilus-dropbox{{ dropbox_version }}.rpm
+#- name: install dropbox rpm from a local file
+#  dnf:
+#    name: /tmp/nautilus-dropbox{{ dropbox_version }}.rpm
+#    state: present

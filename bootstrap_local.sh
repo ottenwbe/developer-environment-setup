@@ -5,30 +5,39 @@ set -e
 echo "== BEGIN BOOTSTRAP =="
 
 hostfile=$1
-system=$2
+user=$2
+system=$3
 
 if [ -z "${hostfile}" ] ; then
-  echo "usage: ./build.sh <path-to-host-file> [<Fedora|Ubuntu>]"
+  echo "usage: ./bootstrap_local.sh <path-to-host-file> <user> [<Fedora>]"
   exit 1
+fi
+
+if [ -z "${user}" ]; then
+    echo "usage: ./bootstrap_local.sh <path-to-host-file> <user> [<Fedora>]"
+    exit 1
+fi
+
+if [ -z "${system}" ] ; then
+    system="Fedora"
+fi
+
+if [ "${system}" == "Ubuntu" ] ; then
+	echo "Ubuntu is no longer supported"
+    exit 1
 fi
 
 echo "== SETUP ${system} =="
 if [ "${system}" == "Fedora" ] ; then
-	echo "== Ensure Python =="
-	dnf -y install python2 python2-dnf
-	service sshd start	
-fi
-
-if [ "${system}" == "Ubuntu" ] ; then
-	echo "== Ensure Python =="
-    apt-get install -y python python-pip python-apt python-dev build-essential libssl-dev libffi-dev python-dev 	
+	echo "== Ensure Python on Fedora=="
+	sudo dnf -y install python2 python2-dnf
+	sudo service sshd start
 fi
 
 echo "== INSTALL ANSIBLE =="
 pip install markupsafe
 pip install ansible
 
-
-ansible-playbook -i ${hostfile} playbook.yml --connection=local 
+ansible-playbook -i hosts site.yml --connection=local --extra-vars "user=${user}" --ask-become-pass
 
 echo "== END BOOTSTRAP =="

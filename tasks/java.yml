@@ -1,6 +1,0 @@
----
-- name: java - build tools
-  package: name={{ item }} state=latest
-  with_items:
-    - maven
-    - gradle

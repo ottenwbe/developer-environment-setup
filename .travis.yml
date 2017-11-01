@@ -2,13 +2,7 @@ env:
   - >
     container_id=$(mktemp)
     distribution=fedora
-    version=24
-    init=/sbin/init
-    run_opts=""
-  - >
-    container_id=$(mktemp)
-    distribution=ubuntu
-    version=14.04
+    version=26
     init=/sbin/init
     run_opts=""
 
@@ -24,8 +18,9 @@ script:
     # Run container in detached state
   - sudo docker run --detach --volume="${PWD}":/home/ansible:ro ${run_opts} ${distribution}:ansible "${init}" > "${container_id}"
 
-  - sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook -i /home/ansible/test/docker/test_hosts --syntax-check /home/ansible/playbook.yml
-  - sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook -i /home/ansible/test/docker/test_hosts /home/ansible/playbook.yml --connection=local --become
+  - sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook -i /home/ansible/test/docker/test_hosts --syntax-check /home/ansible/site.yml
+  - sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook -i /home/ansible/test/docker/test_hosts /home/ansible/site.yml --connection=local --become
 
     # Clean up
   - sudo docker stop "$(cat ${container_id})"
+  - sudo docker rm "$(cat ${container_id})"

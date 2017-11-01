@@ -1,7 +1,0 @@
----
-- name: install the 'Development tools' package group
-  dnf:
-    name: "@Development tools"
-    state: latest
-  when: 
-    ansible_os_family == "RedHat"    

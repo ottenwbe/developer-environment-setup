@@ -1,0 +1,15 @@
+---
+- hosts: all
+  tasks:
+  - include_role:
+      name: common
+  - include_role:
+      name: go
+  - include_role:
+      name: java
+  - include_role:
+      name: ruby
+  - include_role:
+      name: cpp
+  - include_role:
+      name: python

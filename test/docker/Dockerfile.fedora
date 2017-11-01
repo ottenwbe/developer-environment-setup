@@ -1,4 +1,4 @@
-FROM fedora:latest
+FROM fedora:26
 # Install Ansible
 RUN dnf -y update
 RUN dnf install -y python2 python2-dnf ansible

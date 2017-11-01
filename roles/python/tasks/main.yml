@@ -1,0 +1,5 @@
+---
+- name: python - basic install
+  become: true
+  package: name=python state=present
+

@@ -1,0 +1,16 @@
+- name: install docker and compose
+  become: true
+  package: 
+    name={{ item }} state=present
+  with_items:
+    - docker
+    - docker-compose
+- name: register and (re)start docker service
+  become: true
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    name: docker
+    enabled: yes
+  tags:
+    - systemd

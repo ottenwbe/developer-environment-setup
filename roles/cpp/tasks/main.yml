@@ -1,12 +1,13 @@
 ---
 - name: cpp - compiler
-  package: name={{ item }} state=latest
+  become: true
+  package: name={{ item }} state=present
   with_items:
     - clang
-    #- clang-analyzer
     - gcc
 - name: cpp - build tools
-  package: name={{ item }} state=latest
+  become: true
+  package: name={{ item }} state=present
   with_items:
     - make
     - cmake

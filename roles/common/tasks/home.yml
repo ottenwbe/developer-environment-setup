@@ -1,0 +1,16 @@
+---
+- name: home - keygen dependency
+  become: true
+  package: name=openssh state=present
+- name: home - create the user
+  user:
+    name: "{{ user }}"
+    generate_ssh_key: yes
+    ssh_key_bits: 2048
+    ssh_key_file: .ssh/id_rsa
+- name: home - create a 'workspace' folder for the user
+  file:
+    path: "/home/{{ user }}/workspace"
+    state: directory
+    mode: 0755
+    owner: "{{ user }}"
