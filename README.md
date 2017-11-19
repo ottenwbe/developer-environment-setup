@@ -58,7 +58,7 @@ The playbook can be tested in a Docker container---more or less.
 ### Docker
 
 
-__NOTE__: On an selinux, i.e., Fedora, first execute the following command in the root directory of the project.
+__NOTE__: On an SELinux, i.e., Fedora, first execute the following command in the root directory of the project.
 
 ```bash
 chcon -Rt svirt_sandbox_file_t "${PWD}"

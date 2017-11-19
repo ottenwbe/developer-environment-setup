@@ -1,0 +1,25 @@
+---
+- name: zsh - install
+  become: true
+  package: name=zsh state=present
+  register: installation
+- name: zsh - cloning  oh-my-zsh
+  git:
+    repo=https://github.com/robbyrussell/oh-my-zsh
+    dest=~/.oh-my-zsh
+  when: installation|success
+  register: cloning
+- name: zsh - Generate ~.zshrc
+  template:
+    mode: 0644
+    src: zshrc.j2
+    owner: "{{ user }}"
+    dest: "/home/{{ user }}/.zshrc"
+  when: cloning|success
+  register: zsh
+- name: zsh - add zsh as default shell to the user
+  become: true
+  user:
+    name: "{{ user }}"
+    shell: /bin/zsh
+  when: zsh|success
