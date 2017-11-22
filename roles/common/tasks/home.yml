@@ -2,7 +2,7 @@
 - name: home - keygen dependency
   become: true
   package: name=openssh state=present
-- name: home - create the user with zsh as default shell
+- name: home - create the user
   become: true
   user:
     name: "{{ user }}"

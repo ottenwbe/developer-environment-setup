@@ -3,6 +3,12 @@
   become: true
   package: name=zsh state=present
   register: installation
+- name: zsh - fonts
+  become: true
+  package: name={{ item }} state=present
+  with_items:
+    - powerline
+    - powerline-fonts
 - name: zsh - cloning  oh-my-zsh
   git:
     repo=https://github.com/robbyrussell/oh-my-zsh

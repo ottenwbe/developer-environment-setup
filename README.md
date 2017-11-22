@@ -69,7 +69,7 @@ On a non SELinux you can simply build a docker image and execute the playbook in
 ```bash
 sudo docker build --rm=true --file=test/docker/Dockerfile.fedora --tag=fedora:ansible test/docker
 sudo docker run --detach --volume="${PWD}":/home/ansible:ro fedora:ansible "/sbin/init" > cid
-sudo docker exec --tty "$(cat cid)" env TERM=xterm ansible-playbook -i /home/ansible/test/docker/test_hosts /home/ansible/playbook.yml --connection=local --become --extra-vars "user=<your user>" --skip-tags "systemd"
+sudo docker exec --tty "$(cat cid)" env TERM=xterm ansible-playbook -i /home/ansible/test/docker/test_hosts /home/ansible/site.yml --connection=local --become --extra-vars "user=<your user>" --skip-tags "systemd"
 ```
 
 __Note__: We skip everything related to systemd, since systemd is not monitoring our services in the container.  
