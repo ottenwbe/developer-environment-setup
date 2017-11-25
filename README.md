@@ -7,7 +7,7 @@ This ansible playbook is used by me to automate the setup of my Linux developer 
 ## Supported Linux Distributions
 
 Right now the only supported Distribution is:
-* Fedora (26)
+* Fedora (26,27)
 
 Formerly supported:
 * Ubuntu
@@ -64,11 +64,11 @@ __NOTE__: On an SELinux, i.e., Fedora, first execute the following command in th
 chcon -Rt svirt_sandbox_file_t "${PWD}"
 ```
 
-On a non SELinux you can simply build a docker image and execute the playbook in a container:
+On a non SELinux you can simply build a docker image and execute the playbook in a container. Replace 'your name' with a username that suits you and run the following commands:
 
 ```bash
-sudo docker build --rm=true --file=test/docker/Dockerfile.fedora --tag=fedora:ansible test/docker
-sudo docker run --detach --volume="${PWD}":/home/ansible:ro fedora:ansible "/sbin/init" > cid
+sudo docker build --rm=true --file=test/docker/Dockerfile.fedora27 --tag=fedora27:ansible test/docker
+sudo docker run --detach --volume="${PWD}":/home/ansible:ro fedora27:ansible "/sbin/init" > cid
 sudo docker exec --tty "$(cat cid)" env TERM=xterm ansible-playbook -i /home/ansible/test/docker/test_hosts /home/ansible/site.yml --connection=local --become --extra-vars "user=<your user>" --skip-tags "systemd"
 ```
 
