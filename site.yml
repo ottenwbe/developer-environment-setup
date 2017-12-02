@@ -2,6 +2,8 @@
 - hosts: all
   tasks:
   - include_role:
+      name: user  
+  - include_role:
       name: common
   - include_role:
       name: go

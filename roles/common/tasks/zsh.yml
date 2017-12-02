@@ -3,29 +3,53 @@
   become: true
   package: name=zsh state=present
   register: installation
-- name: zsh - fonts
+- name: zsh - install powerline fonts
   become: true
   package: name={{ item }} state=present
   with_items:
     - powerline
-    - powerline-fonts
+    - powerline-fonts    
+- name: zsh - cloning nerd fonts
+  git:
+    repo=https://github.com/ryanoasis/nerd-fonts.git
+    dest="/home/{{ item }}/workspace/fonts"
+  when: installation|success    
+  register: nerd_fonts_cloned
+  with_items: "{{ users }}"
+- name: zsh - install nerd fonts
+  shell: "/home/{{ item }}/workspace/fonts/install.sh"
+  register: install_cmd
+  # This is a workaround! The install commmand apperently succeeds but returns with rc 1!
+  failed_when: install_cmd.rc >= 2 
+  when: nerd_fonts_cloned|success   
+  with_items: "{{ users }}"
+  # We do not delete the fonts workspace, although it might not be used any more, since the USER should decide what happens with the dir
 - name: zsh - cloning  oh-my-zsh
   git:
     repo=https://github.com/robbyrussell/oh-my-zsh
-    dest=~/.oh-my-zsh
+    dest="/home/{{ item }}/.oh-my-zsh"
   when: installation|success
   register: cloning
+  with_items: "{{ users }}"  
+- name: zsh - cloning powerlevel9k
+  git:
+    repo=https://github.com/bhilburn/powerlevel9k.git
+    dest="/home/{{ item }}/.oh-my-zsh/custom/themes/powerlevel9k"
+  when: installation|success  
+  with_items: "{{ users }}"
 - name: zsh - Generate ~.zshrc
   template:
     mode: 0644
     src: zshrc.j2
-    owner: "{{ user }}"
-    dest: "/home/{{ user }}/.zshrc"
+    owner: "{{ item }}"
+    dest: "/home/{{ item }}/.zshrc"
   when: cloning|success
   register: zsh
+  with_items: "{{ users }}"
 - name: zsh - add zsh as default shell to the user
   become: true
   user:
-    name: "{{ user }}"
+    name: "{{ item }}"
     shell: /bin/zsh
   when: zsh|success
+  with_items: "{{ users }}"

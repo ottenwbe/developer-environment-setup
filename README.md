@@ -48,7 +48,7 @@ sh bootstrap_local.sh hosts <your user> Fedora
 
 On a local Linux installation where ansible is installed the playbook can be executed as follows:
 ```bash
-ansible-playbook -i hosts site.yml --connection=local --extra-vars "user=<your user>" --ask-become-pass
+ansible-playbook -i hosts site.yml --connection=local --extra-vars '{"users": ["your user"]}' --ask-become-pass
 ```
 
 ## Testing 
@@ -64,12 +64,12 @@ __NOTE__: On an SELinux, i.e., Fedora, first execute the following command in th
 chcon -Rt svirt_sandbox_file_t "${PWD}"
 ```
 
-On a non SELinux you can simply build a docker image and execute the playbook in a container. Replace 'your name' with a username that suits you and run the following commands:
+On a non SELinux you can simply build a docker image and execute the playbook in a container. Replace one of the 'testuser's' with a username that suits you and run the following commands:
 
 ```bash
 sudo docker build --rm=true --file=test/docker/Dockerfile.fedora27 --tag=fedora27:ansible test/docker
 sudo docker run --detach --volume="${PWD}":/home/ansible:ro fedora27:ansible "/sbin/init" > cid
-sudo docker exec --tty "$(cat cid)" env TERM=xterm ansible-playbook -i /home/ansible/test/docker/test_hosts /home/ansible/site.yml --connection=local --become --extra-vars "user=<your user>" --skip-tags "systemd"
+sudo docker exec --tty "$(cat cid)" env TERM=xterm ansible-playbook -i /home/ansible/test/docker/test_hosts /home/ansible/site.yml --connection=local --become --extra-vars '{"users": ["testuser1","testuser2"]}' --skip-tags "systemd"
 ```
 
 __Note__: We skip everything related to systemd, since systemd is not monitoring our services in the container.  
