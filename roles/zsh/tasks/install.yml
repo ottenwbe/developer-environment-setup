@@ -1,0 +1,26 @@
+---
+- name: zsh - install
+  become: true
+  package: name=zsh state=present
+  register: zsh_installation
+- name: zsh - install powerline fonts
+  become: true
+  package: name={{ item }} state=present
+  with_items:
+    - powerline
+    - powerline-fonts    
+- name: zsh - cloning nerd fonts  
+  become: true
+  git:
+    repo=https://github.com/ryanoasis/nerd-fonts.git
+    dest="/opt/fonts"
+  when: zsh_installation|success    
+  register: nerd_fonts_cloned
+- name: zsh - install nerd fonts for system
+  become: true
+  shell: "/opt/fonts/install.sh -S"
+  register: nerd_font_installation
+  # This is a workaround! The install commmand apperently succeeds but returns with rc 1!
+  failed_when: nerd_font_installation.rc >= 2 
+  when: nerd_fonts_cloned|success   
+  # We do not delete the fonts workspace, although it might not be used any more, since the USER should decide what happens with the dir
