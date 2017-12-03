@@ -1,5 +1,6 @@
 ---
 - name: Add google repository
+  become: true
   yum_repository:
     name: google-chrome
     description: google-chrome - $basearch
@@ -7,12 +8,8 @@
     enabled: yes
     gpgkey: https://dl-ssl.google.com/linux/linux_signing_key.pub
     baseurl: http://dl.google.com/linux/chrome/rpm/stable/$basearch
-  when:
-    ansible_os_family == "RedHat"
 - name: install chrome
   become: true
   dnf:
     name: google-chrome-stable
     state: latest
-  when:
-    ansible_os_family == "RedHat"

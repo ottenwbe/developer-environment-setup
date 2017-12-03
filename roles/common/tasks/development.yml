@@ -4,12 +4,8 @@
   dnf:
     name: "@Development tools"
     state: latest
-  when: 
-    ansible_os_family == "RedHat"
 - name: install the 'C Development Tools and Libraries' package group
   become: true
   dnf:
     name: "@C Development Tools and Libraries"
     state: latest
-  when:
-    ansible_os_family == "RedHat"

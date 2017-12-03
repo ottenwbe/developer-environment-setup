@@ -9,7 +9,6 @@
   package: name={{ item }} state=latest
   with_items:
     - git
-    - eclipse
     - vagrant
     - doxygen
 - name: tools - productivity

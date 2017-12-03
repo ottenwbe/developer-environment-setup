@@ -21,14 +21,15 @@ Formerly supported:
 ├── ... 
 ├── roles/              // Roles to be executed by the playbook
 │   ├── common          // Installation of common tools, external repos (rpm-fusion...), etc. 
+│   ├── user            // Creation of users
+│   ├── zsh             // Installation of zsh for each user
 │   ├── cpp             // Everything needed for C(pp) development
 │   ├── go              // Everything needed for Golang development
 │   ├── java            // Everything needed for Java development
 │   ├── python          // Everything needed for Python development
 │   └── ruby            // Everything needed for Ruby development       
 └── test/               // Test the playbook in docker images
-    ├── docker/
-    └── vagrant/        // [Deprecated] kept for experimental support of other Distros
+    └── docker/
 ```
 
 ## Usage 
@@ -77,14 +78,5 @@ __Note__: We skip everything related to systemd, since systemd is not monitoring
 After the test has finished you can stop the container:
 ```bash
 sudo docker stop "$(cat cid)"
-```
-
-### [Deprecated]: Vagrant
-
-Since Ubuntu is no longer in the focus of this project, tests are mainly focused on Fedora and Docker.
-
-```bash
-cd test/vagrant
-./test.sh # Executes vagrant up, halt and destroy 
 ```
 

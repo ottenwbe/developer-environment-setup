@@ -6,6 +6,8 @@
   - include_role:
       name: common
   - include_role:
+      name: zsh
+  - include_role:
       name: go
   - include_role:
       name: java
