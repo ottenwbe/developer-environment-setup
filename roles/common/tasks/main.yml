@@ -1,4 +1,5 @@
 - include_tasks: update.yml
+- include_tasks: vscode.yml
 - include_tasks: tools.yml
 - include_tasks: chrome.yml
 - include_tasks: development.yml
