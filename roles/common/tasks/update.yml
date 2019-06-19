@@ -15,8 +15,7 @@ fedora_version.stdout }}.noarch.rpm"]
     ansible_distribution  == "Fedora"
 - name: update - packages
   package: 
-    name: * 
-    state: latest   
+    name=* state=latest   
   become: true
   when:
     ansible_distribution  == "Fedora"

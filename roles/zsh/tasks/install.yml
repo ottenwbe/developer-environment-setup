@@ -14,7 +14,7 @@
   git:
     repo=https://github.com/ryanoasis/nerd-fonts.git
     dest="/opt/fonts"
-  when: zsh_installation|success    
+  when: zsh_installation is success    
   register: nerd_fonts_cloned
 - name: zsh - install nerd fonts for system
   become: true

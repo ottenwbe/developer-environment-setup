@@ -12,15 +12,6 @@ services:
 before_install:
   - sudo apt-get update
   - docker pull ${distribution}:${version}
-  - docker build --rm=true --file=test/docker/Dockerfile.${distribution} --tag=${distribution}:ansible${version} test/docker
 
 script:
-    # Run container in detached state
-  - docker run --detach --volume="${PWD}":/home/ansible:ro ${run_opts} ${distribution}:ansible${version} "${init}" > "${container_id}"
-
-  - docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook -i /home/ansible/test/docker/test_hosts --syntax-check /home/ansible/site.yml
-  - docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook -i /home/ansible/test/docker/test_hosts /home/ansible/site.yml --connection=local --become --extra-vars --extra-vars '{"users": ["test"]}' --skip-tags "systemd"
-
-    # Clean up
-  - docker stop "$(cat ${container_id})"
-  - docker rm "$(cat ${container_id})"
+  - ./test/test.sh

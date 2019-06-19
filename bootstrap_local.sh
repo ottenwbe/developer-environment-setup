@@ -34,6 +34,6 @@ echo "== INSTALL ANSIBLE =="
 pip3 install markupsafe --upgrade --user
 pip3 install ansible --upgrade --user
 
-ansible-playbook -i hosts site.yml --connection=local --extra-vars "user=${user}" --ask-become-pass
+ansible-playbook -i hosts site.yml --connection=local --extra-vars "{\"users\": [\"${user}\"]}" --ask-become-pass
 
 echo "== END BOOTSTRAP =="
