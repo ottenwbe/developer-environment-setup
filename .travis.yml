@@ -2,13 +2,7 @@ env:
   - >
     container_id=$(mktemp)
     distribution=fedora
-    version=26
-    init=/sbin/init
-    run_opts=""
-  - >
-    container_id=$(mktemp)
-    distribution=fedora
-    version=27
+    version=30
     init=/sbin/init
     run_opts=""
 
@@ -17,16 +11,16 @@ services:
 
 before_install:
   - sudo apt-get update
-  - sudo docker pull ${distribution}:${version}
-  - sudo docker build --rm=true --file=test/docker/Dockerfile.${distribution}${version} --tag=${distribution}:ansible${version} test/docker
+  - docker pull ${distribution}:${version}
+  - docker build --rm=true --file=test/docker/Dockerfile.${distribution}${version} --tag=${distribution}:ansible${version} test/docker
 
 script:
     # Run container in detached state
-  - sudo docker run --detach --volume="${PWD}":/home/ansible:ro ${run_opts} ${distribution}:ansible${version} "${init}" > "${container_id}"
+  - docker run --detach --volume="${PWD}":/home/ansible:ro ${run_opts} ${distribution}:ansible${version} "${init}" > "${container_id}"
 
-  - sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook -i /home/ansible/test/docker/test_hosts --syntax-check /home/ansible/site.yml
-  - sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook -i /home/ansible/test/docker/test_hosts /home/ansible/site.yml --connection=local --become --extra-vars "user=test" --skip-tags "systemd"
+  - docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook -i /home/ansible/test/docker/test_hosts --syntax-check /home/ansible/site.yml
+  - docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook -i /home/ansible/test/docker/test_hosts /home/ansible/site.yml --connection=local --become --extra-vars "user=test" --skip-tags "systemd"
 
     # Clean up
-  - sudo docker stop "$(cat ${container_id})"
-  - sudo docker rm "$(cat ${container_id})"
+  - docker stop "$(cat ${container_id})"
+  - docker rm "$(cat ${container_id})"
