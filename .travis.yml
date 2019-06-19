@@ -19,7 +19,7 @@ script:
   - docker run --detach --volume="${PWD}":/home/ansible:ro ${run_opts} ${distribution}:ansible${version} "${init}" > "${container_id}"
 
   - docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook -i /home/ansible/test/docker/test_hosts --syntax-check /home/ansible/site.yml
-  - docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook -i /home/ansible/test/docker/test_hosts /home/ansible/site.yml --connection=local --become --extra-vars --extra-vars '{"users": ["teste"]}' --skip-tags "systemd"
+  - docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook -i /home/ansible/test/docker/test_hosts /home/ansible/site.yml --connection=local --become --extra-vars --extra-vars '{"users": ["test"]}' --skip-tags "systemd"
 
     # Clean up
   - docker stop "$(cat ${container_id})"
