@@ -37,7 +37,7 @@ Formerly supported:
 First of all, clone this repository.
 
 ```
-    git clone https://github.com/ottenwbe/developer-environment-setup.git
+git clone https://github.com/ottenwbe/developer-environment-setup.git
 ```
 
 The ```bootstrap_local.sh``` script installs ansible as a prerequisite for executing the playbook.
@@ -75,8 +75,9 @@ sudo docker exec --tty "$(cat cid)" env TERM=xterm ansible-playbook -i /home/ans
 
 __Note__: We skip everything related to systemd, since systemd is not monitoring our services in the container.  
 
-After the test has finished you can stop the container:
+After the test has finished you can stop the container and remove it:
 ```bash
 sudo docker stop "$(cat cid)"
+sudo docker rm "$(cat cid)"
 ```
 
