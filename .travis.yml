@@ -14,4 +14,4 @@ before_install:
   - docker pull ${distribution}:${version}
 
 script:
-  - ./test/test.sh
+  - ./test/test.sh ${version}
