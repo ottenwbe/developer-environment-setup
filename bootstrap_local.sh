@@ -8,14 +8,9 @@ system=$3
 
 set -uex pipefail
 
-if [ -z "${hostfile}" ] ; then
+if [ -z "${hostfile}" -o -z "${user}" ] ; then
   echo "usage: ./bootstrap_local.sh <path-to-host-file> <user> [<Fedora>]"
   exit 1
-fi
-
-if [ -z "${user}" ]; then
-    echo "usage: ./bootstrap_local.sh <path-to-host-file> <user> [<Fedora>]"
-    exit 1
 fi
 
 if [ -z "${system}" ] ; then
@@ -30,9 +25,8 @@ if [ "${system}" == "Fedora" ] ; then
 	sudo systemctl start sshd
 fi
 
-echo "== INSTALL ANSIBLE =="
-pip3 install markupsafe --upgrade --user
-pip3 install ansible --upgrade --user
+echo "== INSTALL ANSIBLE (AND PREREQUISITES)=="
+pip3 install -r requirements.txt
 
 ansible-playbook -i hosts site.yml --connection=local --extra-vars "{\"users\": [\"${user}\"]}" --ask-become-pass
 
