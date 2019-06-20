@@ -1,0 +1,6 @@
+ARG FEDORA_VERSION 
+FROM fedora:${FEDORA_VERSION}
+# Install Ansible
+RUN dnf -y update \
+    && dnf install -y python3 python3-pip \
+    && pip3 install ansible 

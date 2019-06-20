@@ -7,10 +7,7 @@ This ansible playbook is used by me to automate the setup of my Linux developer 
 ## Supported Linux Distributions
 
 Right now the only supported Distribution is:
-* Fedora (26,27)
-
-Formerly supported:
-* Ubuntu
+* Fedora 30
 
 ## Structure
 
@@ -37,7 +34,7 @@ Formerly supported:
 First of all, clone this repository.
 
 ```
-    git clone https://github.com/ottenwbe/developer-environment-setup.git
+git clone https://github.com/ottenwbe/developer-environment-setup.git
 ```
 
 The ```bootstrap_local.sh``` script installs ansible as a prerequisite for executing the playbook.
@@ -58,7 +55,6 @@ The playbook can be tested in a Docker container---more or less.
 
 ### Docker
 
-
 __NOTE__: On an SELinux, i.e., Fedora, first execute the following command in the root directory of the project.
 
 ```bash
@@ -68,15 +64,16 @@ chcon -Rt svirt_sandbox_file_t "${PWD}"
 On a non SELinux you can simply build a docker image and execute the playbook in a container. Replace one of the 'testuser's' with a username that suits you and run the following commands:
 
 ```bash
-sudo docker build --rm=true --file=test/docker/Dockerfile.fedora27 --tag=fedora27:ansible test/docker
+docker build --file=test/docker/Dockerfile.fedora27 --tag=fedora27:ansible test/docker
 sudo docker run --detach --volume="${PWD}":/home/ansible:ro fedora27:ansible "/sbin/init" > cid
-sudo docker exec --tty "$(cat cid)" env TERM=xterm ansible-playbook -i /home/ansible/test/docker/test_hosts /home/ansible/site.yml --connection=local --become --extra-vars '{"users": ["testuser1","testuser2"]}' --skip-tags "systemd"
+docker exec --tty "$(cat cid)" env TERM=xterm ansible-playbook -i /home/ansible/test/docker/test_hosts /home/ansible/site.yml --connection=local --become --extra-vars '{"users": ["testuser1","testuser2"]}' --skip-tags "systemd"
 ```
 
-__Note__: We skip everything related to systemd, since systemd is not monitoring our services in the container.  
+__Note__: We skip everything related to systemd, since systemd is not monitoring our services in the container. 
 
-After the test has finished you can stop the container:
+After the test has finished you can stop the container and remove it:
 ```bash
-sudo docker stop "$(cat cid)"
+docker stop "$(cat cid)"
+docker rm "$(cat cid)"
 ```
 

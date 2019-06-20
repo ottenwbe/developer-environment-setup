@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: all  
   tasks:
   - include_role:
       name: user  

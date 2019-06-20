@@ -1,0 +1,13 @@
+---
+- name: go - basic install
+  become: true
+  package: name=golang state=latest
+- name: go - set GOPATH at startup
+  become: true
+  copy: src="{{ role_path }}/files/go-startup.sh"
+        dest=/etc/profile.d
+- name: go - set GOPATH at startup
+  become: true
+  command: chmod ugo+rx /etc/profile.d/go-startup.sh
+- name: go - set GOPATH now (and ensure that GOPATH exists)
+  shell: "/etc/profile.d/go-startup.sh"

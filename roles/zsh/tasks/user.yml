@@ -22,7 +22,7 @@
     group: "{{ item }}"    
     dest: "/home/{{ item }}/.zshrc"
   register: oh_my_zsh_rc
-  when: oh_my_zsh_cloning|changed
+  when: oh_my_zsh_cloning is changed
   with_items: "{{ users }}"
 - name: zsh - make the user the owner of the oh-my-zsh folder
   become: true
@@ -37,5 +37,5 @@
   user:
     name: "{{ item }}"
     shell: /bin/zsh
-  when: oh_my_zsh_rc|changed
+  when: oh_my_zsh_rc is changed
   with_items: "{{ users }}"
