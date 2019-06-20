@@ -12,13 +12,10 @@
   when:
     ansible_os_family == "RedHat"
 - name: ruby - installation of default gems
-  gem: name={{ item }} state=present
+  ## executing as command is a workaround for the current gem bug: https://github.com/ansible/ansible/issues/50434
+  command: "gem install {{ item }}"
   with_items:
     - bundler
     - rake
     - rspec
-- name: Update Rubygems
-  command: gem update --system
-  tags:
-    - update
 
