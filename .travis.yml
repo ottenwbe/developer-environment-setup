@@ -3,8 +3,6 @@ env:
     container_id=$(mktemp)
     distribution=fedora
     version=30
-    init=/sbin/init
-    run_opts=""
 
 services:
   - docker

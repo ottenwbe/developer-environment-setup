@@ -2,12 +2,14 @@
 
 [![Build Status](https://travis-ci.org/ottenwbe/developer-environment-setup.svg?branch=master)](https://travis-ci.org/ottenwbe/developer-environment-setup)
 
-This ansible playbook is used by me to automate the setup of my Linux developer machines. Therefore, this repository will be updated whenever I setup a new machine (commits to master).
+This ansible playbook is used by me to automate the setup of my Linux developer machines. 
+If you frequently reinstall your system, you know why these scripts had been created.
+Therefore, this repository will be updated whenever I setup a new machine (commits to master).
 
 ## Supported Linux Distributions
 
-Right now the only supported Distribution is:
-* Fedora 30
+Right now the only supported Distributions are:
+* Fedora 33
 
 ## Structure
 
@@ -64,16 +66,23 @@ chcon -Rt svirt_sandbox_file_t "${PWD}"
 On a non SELinux you can simply build a docker image and execute the playbook in a container. Replace one of the 'testuser's' with a username that suits you and run the following commands:
 
 ```bash
-docker build --file=test/docker/Dockerfile.fedora27 --tag=fedora27:ansible test/docker
-sudo docker run --detach --volume="${PWD}":/home/ansible:ro fedora27:ansible "/sbin/init" > cid
-docker exec --tty "$(cat cid)" env TERM=xterm ansible-playbook -i /home/ansible/test/docker/test_hosts /home/ansible/site.yml --connection=local --become --extra-vars '{"users": ["testuser1","testuser2"]}' --skip-tags "systemd"
+docker build --file=test/docker/Dockerfile.fedora --build-arg "FEDORA_VERSION=33" --tag=fedora33:ansible test/docker
+docker run --name=test-fedora --volume="${PWD}":/home/ansible:ro fedora33:ansible ansible-playbook -i /home/ansible/test/docker/test_hosts /home/ansible site.yml --connection=local --become --extra-vars '{"users": ["testuser1","testuser2"]}' --skip-tags "systemd"
+```
+
+or simply use the test scripts
+
+```bash
+sh test/test.sh 33
 ```
 
 __Note__: We skip everything related to systemd, since systemd is not monitoring our services in the container. 
 
 After the test has finished you can stop the container and remove it:
 ```bash
-docker stop "$(cat cid)"
-docker rm "$(cat cid)"
+docker rm test-fedora
 ```
 
+## Note
+
+I created this project for the purpose of educating myself and personal use. If you are interested in the outcome, feel free to contribute; this work is published under the MIT license.

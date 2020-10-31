@@ -3,7 +3,7 @@
   package: name={{ item }} state=latest
   with_items:
     - curl
-    - keepassx
+    - keepassxc
 - name: tools - devel
   become: true
   package: name={{ item }} state=latest
@@ -17,6 +17,5 @@
   with_items:
     - vim
     - nano
-    - geany
     - evince
     - libreoffice
