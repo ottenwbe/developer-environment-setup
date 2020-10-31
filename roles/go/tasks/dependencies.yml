@@ -1,6 +1,4 @@
 ---
-- name: go - install dependency management (dep)
-  command: go get -u github.com/golang/dep/cmd/dep
 - name: go - install ginkgo cli
   command: go get -u github.com/onsi/ginkgo/ginkgo  
 - name: go - install gomega matcher library
