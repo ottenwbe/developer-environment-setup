@@ -1,0 +1,8 @@
+---
+- name: ansible - prerequisites
+  become: true
+  command: dnf -y install python3 python3-pip
+- name: ansible - install with pip
+  command: pip3 install markupsafe ansible
+- name: ansible - install molecule
+  command: pip3 install molecule  
