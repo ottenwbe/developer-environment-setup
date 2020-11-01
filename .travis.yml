@@ -1,8 +1,12 @@
+---
+sudo: required
+language: python
+
 env:
   - >
     container_id=$(mktemp)
     distribution=fedora
-    version=30
+    version=33
 
 services:
   - docker

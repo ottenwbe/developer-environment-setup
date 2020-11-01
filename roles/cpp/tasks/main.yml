@@ -11,3 +11,9 @@
   with_items:
     - make
     - cmake
+- name: cpp - debugging and documentation
+  become: true
+  package: name={{ item }} state=present
+  with_items:
+    - valgrind
+    - doxygen

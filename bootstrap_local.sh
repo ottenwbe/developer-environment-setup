@@ -21,7 +21,7 @@ echo "== SETUP ${system} =="
 if [ "${system}" == "Fedora" ] ; then
 	echo "== Ensure Python on Fedora=="
 	sudo dnf -y install python3 python3-pip
-    echo "== Start ssh service on Fedora=="
+  echo "== Start ssh service on Fedora=="
 	sudo systemctl start sshd
 fi
 
