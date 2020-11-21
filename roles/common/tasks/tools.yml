@@ -4,12 +4,6 @@
   with_items:
     - curl
     - keepassxc
-- name: tools - devel
-  become: true
-  package: name={{ item }} state=latest
-  with_items:
-    - git
-    - vagrant    
 - name: tools - productivity
   become: true
   package: name={{ item }} state=latest
@@ -18,3 +12,11 @@
     - nano
     - evince
     - libreoffice
+- name: tools - productivity
+  become: true
+  package: name={{ item }} state=latest
+  with_items:
+    - vim
+    - nano
+    - evince
+    - libreoffice    
