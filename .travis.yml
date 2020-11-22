@@ -13,7 +13,6 @@ services:
 
 before_install:
   - sudo apt-get update
-  - docker pull ${distribution}:${version}
 
 script:
   - ./test/test.sh ${version}
