@@ -1,7 +1,5 @@
 # developer-environment-setup
 
-[![Build Status](https://travis-ci.org/ottenwbe/developer-environment-setup.svg?branch=master)](https://travis-ci.org/ottenwbe/developer-environment-setup)
-
 This ansible playbook is used by me to automate the setup of my Linux developer machines. 
 If you frequently reinstall your system, you know why these scripts had been created.
 Therefore, this repository will be updated whenever I setup a new machine (commits to master).
