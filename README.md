@@ -8,8 +8,9 @@ Therefore, this repository will be updated whenever I setup a new machine (commi
 
 ## Supported Linux Distributions
 
-Right now the only supported Distributions are:
+Right now the only tested Distributions are:
 * Fedora 33
+* Fedora 34
 
 ## Structure
 
