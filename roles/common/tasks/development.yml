@@ -1,4 +1,9 @@
 ---
+- name: dev dependencies - dnf plugins
+  become: true
+  dnf:
+    name: dnf-plugins-core
+    state: latest
 - name: dev dependencies - gh repos
   become: true
   command: dnf config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo
