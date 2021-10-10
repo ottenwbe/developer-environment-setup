@@ -8,10 +8,8 @@
   become: true
   package: name={{ item }} state=latest
   with_items:
-    - vim
-    - nano
-    - evince
-    - libreoffice
+    - git
+    - vagrant    
 - name: tools - productivity
   become: true
   package: name={{ item }} state=latest
