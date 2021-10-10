@@ -31,6 +31,6 @@ jobs:
 
       # Runs a set of commands using the runners shell
       - name: Test Deployment 33
-        run: sh test/test.sh 33
+        run: test/test.sh 33
       - name: Test Deployment 34
-        run: sh test/test.sh 34       
+        run: test/test.sh 34       
