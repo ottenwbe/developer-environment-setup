@@ -1,0 +1,4 @@
+---
+go_version: 1.17.2.linux-amd64
+gopath_path: ~/workspace/go
+goroot_path: /opt/go
