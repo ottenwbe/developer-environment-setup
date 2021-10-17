@@ -1,13 +1,28 @@
 ---
-- name: go - basic install
+- name: go - download go 
+  get_url:
+    url: "https://dl.google.com/go/go{{ go_version }}.tar.gz"
+    dest: ~/go.tar.gz
+    mode: '0540'
+- name: go - install go
   become: true
-  package: name=golang state=latest
-- name: go - set GOPATH at startup
+  shell: cd ~/ && tar -xzf ~/go.tar.gz && mv go /opt/
+- name: go - cleanup install
   become: true
-  copy: src="{{ role_path }}/files/go-startup.sh"
-        dest=/etc/profile.d
-- name: go - set GOPATH at startup
+  file: 
+    path: ~/go.tar.gz
+    state: absent
+- name: go - Generate startup script
   become: true
-  command: chmod ugo+rx /etc/profile.d/go-startup.sh
-- name: go - set GOPATH now (and ensure that GOPATH exists)
-  shell: "/etc/profile.d/go-startup.sh"
+  template:
+    mode: '0555'
+    src: go-startup.j2  
+    dest: "/etc/profile.d/go-startup.sh"
+
+
+- name: go - get version
+  become: true
+  shell: go version
+  register: goversion
+- debug: msg="{{ goversion.stdout }}"
+

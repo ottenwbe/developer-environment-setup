@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+export GOROOT={{ goroot_path }}
+export GOPATH={{ gopath_path }}
+mkdir -p $GOPATH
+export PATH=$PATH:$GOPATH/bin:$GOROOT/bin

@@ -1,4 +1,12 @@
 ---
+- name: dev dependencies - dnf plugins
+  become: true
+  dnf:
+    name: dnf-plugins-core
+    state: latest
+- name: dev dependencies - gh repos
+  become: true
+  command: dnf config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo
 - name: install the 'Development tools' package group
   become: true
   dnf:
@@ -9,3 +17,14 @@
   dnf:
     name: "@C Development Tools and Libraries"
     state: latest
+- name: tools - scm
+  become: true
+  package: name={{ item }} state=latest
+  with_items:
+    - git
+    - gh
+- name: tools - virtualization
+  become: true
+  package: name={{ item }} state=latest
+  with_items:    
+    - vagrant        

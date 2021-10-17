@@ -4,7 +4,7 @@
   with_items:
     - curl
     - keepassxc
-- name: tools - devel
+- name: tools - productivity
   become: true
   package: name={{ item }} state=latest
   with_items:
@@ -17,4 +17,4 @@
     - vim
     - nano
     - evince
-    - libreoffice
+    - libreoffice    
