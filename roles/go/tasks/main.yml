@@ -1,4 +1,12 @@
 ---
-- include_tasks: install.yml
-- include_tasks: dependencies.yml
+- include_tasks: 
+    file: install.yml
+    apply:
+      environment: 
+        PATH: "~/workspace/go:/opt/go/bin:{{ lookup('env', 'PATH') }}" 
+- include_tasks: 
+    file: dependencies.yml
+    apply:
+      environment: 
+        PATH: "~/workspace/go:/opt/go/bin:{{ lookup('env', 'PATH') }}" 
 

@@ -50,6 +50,14 @@ On a local Linux installation where ansible is installed the playbook can be exe
 ansible-playbook -i hosts site.yml --connection=local --extra-vars '{"users": ["your user"]}' --ask-become-pass
 ```
 
+### Go Specific Details
+
+You can specify a specific go version to install. 
+
+```yaml
+"go_version": "1.17.1.linux-amd64"
+```
+
 ## Testing 
 
 The playbook can be tested in a Docker container---more or less.
@@ -66,7 +74,7 @@ On a non SELinux you can simply build a docker image and execute the playbook in
 
 ```bash
 docker build --file=test/docker/Dockerfile.fedora --build-arg "FEDORA_VERSION=33" --tag=fedora33:ansible test/docker
-docker run --name=test-fedora --volume="${PWD}":/home/ansible:ro fedora33:ansible ansible-playbook -i /home/ansible/test/docker/test_hosts /home/ansible site.yml --connection=local --become --extra-vars '{"users": ["testuser1","testuser2"]}' --skip-tags "systemd"
+docker run --name=test-fedora --volume="${PWD}":/home/ansible:ro fedora33:ansible ansible-playbook -i /home/ansible/test/docker/test_hosts /home/ansible site.yml --connection=local --become --extra-vars '{"users": ["testuser1","testuser2"], "go_version": "1.17.2.linux-amd64" "}' --skip-tags "systemd"
 ```
 
 or simply use the test scripts
