@@ -7,8 +7,8 @@ Therefore, this repository will be updated whenever I setup a new machine (commi
 ## Supported Linux Distributions
 
 Right now the only tested Distributions are:
-* Fedora 33
-* Fedora 34
+* Fedora 42
+* Fedora 43
 
 ## Structure
 
@@ -47,7 +47,7 @@ sh bootstrap_local.sh inventory.yml <your user> Fedora
 
 On a local Linux installation where ansible is installed the playbook can be executed as follows:
 ```bash
-ansible-playbook -i hosts site.yml --connection=local --extra-vars '{"users": ["your user"]}' --ask-become-pass
+ansible-playbook -i inventory.yml site.yml --connection=local --extra-vars '{"users": [{"username": "your user", "git_name": "Your Name", "git_email": "email@example.com"}]}' --ask-become-pass
 ```
 
 ### Go Specific Details
@@ -74,13 +74,13 @@ On a non SELinux you can simply build a docker image and execute the playbook in
 
 ```bash
 docker build --file=test/docker/Dockerfile.fedora --build-arg "FEDORA_VERSION=33" --tag=fedora33:ansible test/docker
-docker run --name=test-fedora --volume="${PWD}":/home/ansible:ro fedora33:ansible ansible-playbook -i /home/ansible/test/docker/test_hosts /home/ansible site.yml --connection=local --become --extra-vars '{"users": ["testuser1","testuser2"], "go_version": "1.17.2.linux-amd64" "}' --skip-tags "systemd"
+docker run --name=test-fedora --volume="${PWD}":/home/ansible:ro fedora33:ansible ansible-playbook -i /home/ansible/test/docker/inventory.yml /home/ansible site.yml --connection=local --become --extra-vars '{"users": [{"username": "testuser1"}, {"username": "testuser2"}], "go_version": "1.17.2.linux-amd64"}' --skip-tags "systemd"
 ```
 
 or simply use the test scripts
 
 ```bash
-sh test/test.sh 33
+sh test/test.sh 43
 ```
 
 __Note__: We skip everything related to systemd, since systemd is not monitoring our services in the container. 

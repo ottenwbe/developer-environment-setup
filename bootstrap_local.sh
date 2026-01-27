@@ -1,22 +1,20 @@
 #!/usr/bin/env bash
 
-echo "== BEGIN BOOTSTRAP =="
+# Ensure we are in the script directory
+cd "$(dirname "$0")"
 
-hostfile=$1
-user=$2
-system=$3
+hostfile=${1:-}
+user=${2:-}
+system=${3:-Fedora}
 
 set -uex pipefail
 
-if [ -z "${hostfile}" -o -z "${user}" ] ; then
+if [ -z "${hostfile}" ] || [ -z "${user}" ] ; then
   echo "usage: ./bootstrap_local.sh <path-to-host-file> <user> [<Fedora>]"
   exit 1
 fi
 
-if [ -z "${system}" ] ; then
-    system="Fedora"
-fi
-
+echo "== BEGIN BOOTSTRAP =="
 echo "== SETUP ${system} =="
 if [ "${system}" == "Fedora" ] ; then
 	echo "== Ensure Python on Fedora=="
@@ -25,9 +23,16 @@ if [ "${system}" == "Fedora" ] ; then
 	sudo systemctl start sshd
 fi
 
-echo "== INSTALL ANSIBLE (AND PREREQUISITES)=="
-pip3 install -r requirements.txt
+echo "== SETUP VIRTUAL ENVIRONMENT =="
+if [ ! -d ".venv" ]; then
+    python3 -m venv .venv
+fi
+source .venv/bin/activate
 
-ansible-playbook -i "${hostfile}" site.yml --connection=local --extra-vars "{\"users\": [\"${user}\"]}" --ask-become-pass
+echo "== INSTALL ANSIBLE (AND PREREQUISITES)=="
+pip install --upgrade pip
+pip install -r requirements.txt
+
+ansible-playbook -i "${hostfile}" site.yml --connection=local --extra-vars "{\"users\": [{\"username\": \"${user}\"}]}" --ask-become-pass
 
 echo "== END BOOTSTRAP =="
