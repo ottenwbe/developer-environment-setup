@@ -42,7 +42,7 @@ The ```bootstrap_local.sh``` script installs ansible as a prerequisite for execu
 On a local Fedora installation where ansible is __not__ installed the playbook can be executed as follows:
 
 ```bash
-sh bootstrap_local.sh hosts <your user> Fedora
+sh bootstrap_local.sh inventory.yml <your user> Fedora
 ```
 
 On a local Linux installation where ansible is installed the playbook can be executed as follows:

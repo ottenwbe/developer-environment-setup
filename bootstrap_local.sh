@@ -28,6 +28,6 @@ fi
 echo "== INSTALL ANSIBLE (AND PREREQUISITES)=="
 pip3 install -r requirements.txt
 
-ansible-playbook -i hosts site.yml --connection=local --extra-vars "{\"users\": [\"${user}\"]}" --ask-become-pass
+ansible-playbook -i "${hostfile}" site.yml --connection=local --extra-vars "{\"users\": [\"${user}\"]}" --ask-become-pass
 
 echo "== END BOOTSTRAP =="
