@@ -5,10 +5,12 @@
   roles:
     - role: user
       tags: user
-    - role: common
-      tags: common
     - role: zsh
       tags: zsh
+    - role: common
+      tags: common
+    - role: vscode
+      tags: vscode
     - role: ansible
       tags: ansible
 

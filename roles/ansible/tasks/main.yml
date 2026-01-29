@@ -1,8 +1,18 @@
 ---
-- name: ansible - prerequisites
+- name: ansible - install ansible and linting tools
   become: true
-  command: dnf -y install python3 python3-pip
-- name: ansible - install with pip
-  command: pip3 install markupsafe ansible
-- name: ansible - install molecule
-  command: pip3 install molecule  
+  ansible.builtin.dnf:
+    name:
+      - ansible
+      - ansible-lint
+      - yamllint
+    state: present
+- name: ansible - create default directory structure
+  become: true
+  ansible.builtin.file:
+    path: "/home/{{ item.0.username }}/.ansible/{{ item.1 }}"
+    state: directory
+    owner: "{{ item.0.username }}"
+    group: "{{ item.0.username }}"
+    mode: '0755'
+  loop: "{{ users | product(['roles', 'collections']) | list }}"

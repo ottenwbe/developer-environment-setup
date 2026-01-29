@@ -1,41 +1,30 @@
 ---
-- name: zsh - cloning  oh-my-zsh
+- name: zsh - install oh-my-zsh via installer script
   become: true
-  git:
-    repo=https://github.com/robbyrussell/oh-my-zsh
-    dest="/home/{{ item }}/.oh-my-zsh"
-  register: oh_my_zsh_cloning
-  with_items: "{{ users }}"  
-- name: zsh - cloning powerlevel9k
+  become_user: "{{ item.username }}"
+  ansible.builtin.shell:
+    cmd: 'curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh | sh -s -- --unattended'
+    creates: "/home/{{ item.username }}/.oh-my-zsh"
+  with_items: "{{ users }}"
+- name: zsh - cloning powerlevel10k
   become: true
-  git:
-    repo=https://github.com/bhilburn/powerlevel9k.git
-    dest="/home/{{ item }}/.oh-my-zsh/custom/themes/powerlevel9k"
-  register: powerlevel_cloning  
+  become_user: "{{ item.username }}"
+  ansible.builtin.git:
+    repo: https://github.com/romkatv/powerlevel10k.git
+    dest: "/home/{{ item.username }}/.oh-my-zsh/custom/themes/powerlevel10k"
   with_items: "{{ users }}"
 - name: zsh - Generate ~.zshrc
   become: true
-  template:
+  ansible.builtin.template:
     mode: 0644
     src: zshrc.j2
-    owner: "{{ item }}"
-    group: "{{ item }}"    
-    dest: "/home/{{ item }}/.zshrc"
-  register: oh_my_zsh_rc
-  when: oh_my_zsh_cloning is changed
-  with_items: "{{ users }}"
-- name: zsh - make the user the owner of the oh-my-zsh folder
-  become: true
-  file:
-    path: "/home/{{ item }}/.oh-my-zsh"
-    owner: "{{ item }}"
-    group: "{{ item }}"   
-    recurse: yes
+    owner: "{{ item.username }}"
+    group: "{{ item.username }}"    
+    dest: "/home/{{ item.username }}/.zshrc"
   with_items: "{{ users }}"
 - name: zsh - add zsh as default shell to the user
   become: true
-  user:
-    name: "{{ item }}"
+  ansible.builtin.user:
+    name: "{{ item.username }}"
     shell: /bin/zsh
-  when: oh_my_zsh_rc is changed
   with_items: "{{ users }}"

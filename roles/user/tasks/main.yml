@@ -1,11 +1,14 @@
-- name: user - keygen dependency
+- name: user - install dependencies
   become: true
-  ansible.builtin.package: name=openssh state=present
+  ansible.builtin.package:
+    name:
+      - openssh
+      - git
+    state: present
 - name: home - create the user
   become: true
   ansible.builtin.user:
     name: "{{ item.username }}"
-    password: "{{ item.password | default(omit) }}"
     generate_ssh_key: "{{ generate_ssh_key }}"
     ssh_key_type: ed25519
     ssh_key_file: .ssh/id_ed25519
@@ -29,9 +32,7 @@
     owner: "{{ item[0].username }}"
     group: "{{ item[0].username }}"
     mode: '0755'
-  with_nested:
-    - "{{ users }}"
-    - [ 'bin', '.local/bin' ]
+  loop: "{{ users | product(['bin', '.local/bin']) | list }}"
 - name: user - configure git user.name
   become: true
   become_user: "{{ item.username }}"

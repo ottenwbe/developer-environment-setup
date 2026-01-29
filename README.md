@@ -21,6 +21,8 @@ Right now the only tested Distributions are:
 │   ├── common          // Installation of common tools, external repos (rpm-fusion...), etc. 
 │   ├── user            // Creation of users
 │   ├── zsh             // Installation of zsh for each user
+│   ├── vscode          // Installation of Visual Studio Code
+│   ├── ansible         // Installation of Ansible and linting tools
 │   ├── cpp             // Everything needed for C(pp) development
 │   ├── go              // Everything needed for Golang development
 │   ├── java            // Everything needed for Java development
