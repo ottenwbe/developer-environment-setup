@@ -1,0 +1,33 @@
+---
+- name: vscode - add repo
+  become: true
+  ansible.builtin.yum_repository:
+    name: code
+    description: Visual Studio Code
+    gpgcheck: yes
+    enabled: yes
+    file: vscode
+    gpgkey: https://packages.microsoft.com/keys/microsoft.asc
+    baseurl: https://packages.microsoft.com/yumrepos/vscode
+- name: vscode - install
+  become: true
+  ansible.builtin.dnf:
+    name:
+      - code
+    state: present
+- name: vscode - install extensions
+  become: true
+  become_user: "{{ item.0.username }}"
+  ansible.builtin.command:
+    cmd: "code --install-extension {{ item.1 }}"
+  loop: "{{ users | product(vscode_extensions) | list }}"
+  vars:
+    vscode_extensions:
+      - ms-azuretools.vscode-docker
+      - ms-python.python
+      - google.geminicodeassist
+      - golang.go
+      - redhat.java
+      - redhat.ansible
+  register: vscode_ext_install
+  changed_when: "'successfully installed' in vscode_ext_install.stdout"
