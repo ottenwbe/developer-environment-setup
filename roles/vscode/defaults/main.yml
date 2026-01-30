@@ -1,0 +1,9 @@
+---
+vscode_extensions:
+  - ms-azuretools.vscode-docker
+  - ms-python.python
+  - google.geminicodeassist
+  - golang.go
+  - redhat.java
+  - redhat.ansible
+  - vscjava.vscode-java-pack

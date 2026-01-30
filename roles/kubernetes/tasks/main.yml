@@ -1,0 +1,34 @@
+---
+- name: kubernetes - install packages
+  become: true
+  ansible.builtin.dnf:
+    name: "{{ kubernetes_packages }}"
+    state: present
+
+- name: kubernetes - install minikube
+  become: true
+  ansible.builtin.get_url:
+    url: https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+    dest: /usr/local/bin/minikube
+    mode: '0755'
+
+- name: kubernetes - install argocd cli
+  become: true
+  ansible.builtin.get_url:
+    url: https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+    dest: /usr/local/bin/argocd
+    mode: '0755'
+
+- name: kubernetes - configure minikube driver
+  become: true
+  become_user: "{{ item.username }}"
+  ansible.builtin.command: minikube config set driver podman
+  loop: "{{ users }}"
+  changed_when: false
+
+- name: kubernetes - configure minikube rootless
+  become: true
+  become_user: "{{ item.username }}"
+  ansible.builtin.command: minikube config set rootless true
+  loop: "{{ users }}"
+  changed_when: false
