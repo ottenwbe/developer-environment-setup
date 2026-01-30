@@ -1,10 +1,37 @@
 ---
-- name: java - install jdk 8
+- name: java - install packages
   become: true
-  package: name=java-1.8.0-openjdk state=latest
-- name: java - build tools
+  ansible.builtin.dnf:
+    name: "{{ java_packages }}"
+    state: present
+
+- name: java - download gradle
   become: true
-  package: name={{ item }} state=present
-  with_items:
-    - maven
-    #- gradle
+  ansible.builtin.get_url:
+    url: "https://services.gradle.org/distributions/gradle-{{ gradle_version }}-bin.zip"
+    dest: "/tmp/gradle-{{ gradle_version }}-bin.zip"
+    mode: '0644'
+
+- name: java - create gradle directory
+  become: true
+  ansible.builtin.file:
+    path: /opt/gradle
+    state: directory
+    mode: '0755'
+
+- name: java - extract gradle
+  become: true
+  ansible.builtin.unarchive:
+    src: "/tmp/gradle-{{ gradle_version }}-bin.zip"
+    dest: /opt/gradle
+    remote_src: yes
+    creates: "/opt/gradle/gradle-{{ gradle_version }}"
+
+- name: java - setup environment variables
+  become: true
+  ansible.builtin.copy:
+    dest: /etc/profile.d/java.sh
+    content: |
+      export JAVA_HOME=/etc/alternatives/java_sdk
+      export PATH=$PATH:/opt/gradle/gradle-{{ gradle_version }}/bin
+    mode: '0644'
