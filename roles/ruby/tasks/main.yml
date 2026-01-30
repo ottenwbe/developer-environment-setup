@@ -1,24 +1,15 @@
 ---
-- name: ruby - basic install
-  ansible.builtin.package:
-    name: "{{ item }}"
-    state: latest
-  become: true
-  loop:
-    - ruby
-    - ruby-devel
-- name: ruby - dependencies for native extensions on Red Hat
+- name: ruby - install packages
   become: true
   ansible.builtin.dnf:
-    name=redhat-rpm-config  state=latest
-  when:
-    ansible_os_family == "RedHat"
-- name: ruby - installation of default gems
-  become: true
-  community.general.gem:
-    name: "{{ item }}"
+    name: "{{ ruby_packages }}"
     state: present
-  loop:
-    - bundler
-    - rake
-    - rspec
+
+- name: ruby - configure global gemrc
+  become: true
+  ansible.builtin.copy:
+    dest: /etc/gemrc
+    content: |
+      install: --no-document
+      update: --no-document
+    mode: '0644'

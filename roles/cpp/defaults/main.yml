@@ -1,0 +1,15 @@
+---
+cpp_packages:
+  - clang
+  - gcc
+  - make
+  - cmake
+  - valgrind
+  - doxygen
+  - gdb
+  - lldb
+  - ninja-build
+  - clang-tools-extra
+  - cppcheck
+  - conan
+  - ccache

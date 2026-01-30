@@ -1,5 +1,6 @@
 ---
-- name: python - basic install
+- name: python - install packages
   become: true
-  package: name=python state=present
-
+  ansible.builtin.dnf:
+    name: "{{ python_packages }}"
+    state: present

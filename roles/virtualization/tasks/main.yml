@@ -1,0 +1,48 @@
+---
+- name: virtualization - install packages
+  become: true
+  ansible.builtin.dnf:
+    name: "{{ virtualization_packages }}"
+    state: present
+
+- name: virtualbox - install packages
+  become: true
+  ansible.builtin.dnf:
+    name:
+      - VirtualBox
+      - akmod-VirtualBox
+      - kernel-devel
+      - kernel-headers
+    state: present
+
+- name: virtualbox - install current kernel headers
+  become: true
+  ansible.builtin.dnf:
+    name: "kernel-devel-{{ ansible_kernel }}"
+    state: present
+  ignore_errors: true
+
+- name: virtualbox - enable akmods service
+  become: true
+  ansible.builtin.service:
+    name: akmods
+    enabled: yes
+
+- name: virtualbox - build kernel modules
+  become: true
+  ansible.builtin.command: akmods
+  changed_when: false
+
+- name: virtualbox - load kernel module
+  become: true
+  ansible.builtin.command: modprobe vboxdrv
+  changed_when: false
+  ignore_errors: true
+
+- name: virtualbox - add users to vboxusers group
+  become: true
+  ansible.builtin.user:
+    name: "{{ item.username }}"
+    groups: vboxusers
+    append: yes
+  loop: "{{ users }}"

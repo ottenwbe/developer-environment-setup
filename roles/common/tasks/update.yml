@@ -1,40 +1,9 @@
 ---
-- name: update - capture fedora version
-  command: rpm -E %fedora
-  register: fedora_version
-  when:
-    ansible_distribution  == "Fedora"
-- name: install free gpg key
+- name: update - upgrade all packages
   become: true
-  rpm_key:
-    key: "https://rpmfusion.org/keys?action=AttachFile&do=get&target=RPM-GPG-KEY-rpmfusion-free-fedora-2020"
-    state: present
-
-- name: install nonfree gpg key
-  become: true
-  rpm_key:
-    key: "https://rpmfusion.org/keys?action=AttachFile&do=get&target=RPM-GPG-KEY-rpmfusion-nonfree-fedora-2020"
-    state: present
- 
-- name: update - install rpmfusion on fedora
-  dnf: 
-    name: ["https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ fedora_version.stdout 
-}}.noarch.rpm", "https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ 
-fedora_version.stdout }}.noarch.rpm"]
+  ansible.builtin.dnf:
+    name: "*"
     state: latest
-  become: true
-  when:
-    ansible_distribution  == "Fedora"
-- name: update - packages
-  package: 
-    name=* state=latest   
-  become: true
-  when:
-    ansible_distribution  == "Fedora"
+    update_cache: yes
   tags:
     - update
-
-
-
-
-

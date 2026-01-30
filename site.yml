@@ -30,3 +30,5 @@
       tags: python
     - role: kubernetes
       tags: kubernetes
+    - role: virtualization
+      tags: virtualization

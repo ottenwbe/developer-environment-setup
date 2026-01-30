@@ -1,19 +1,6 @@
 ---
-- name: cpp - compiler
+- name: cpp - install packages
   become: true
-  package: name={{ item }} state=present
-  with_items:
-    - clang
-    - gcc
-- name: cpp - build tools
-  become: true
-  package: name={{ item }} state=present
-  with_items:
-    - make
-    - cmake
-- name: cpp - debugging and documentation
-  become: true
-  package: name={{ item }} state=present
-  with_items:
-    - valgrind
-    - doxygen
+  ansible.builtin.dnf:
+    name: "{{ cpp_packages }}"
+    state: present
