@@ -26,6 +26,7 @@ Right now the only tested Distributions are:
 │   ├── cpp             // Everything needed for C(pp) development
 │   ├── go              // Everything needed for Golang development
 │   ├── java            // Everything needed for Java development
+│   ├── kubernetes      // Everything needed for Kubernetes development (minikube, helm, ...)
 │   ├── python          // Everything needed for Python development
 │   └── ruby            // Everything needed for Ruby development       
 └── test/               // Test the playbook in docker images

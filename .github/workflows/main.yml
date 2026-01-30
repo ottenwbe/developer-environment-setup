@@ -15,8 +15,18 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install ansible-lint
+        run: pip install ansible-lint
+      - name: Run ansible-lint
+        run: ansible-lint
+
   # This workflow contains a single job called "build"
   build:
+    needs: lint
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     strategy:
@@ -27,4 +37,4 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
       - name: Test Deployment Fedora ${{ matrix.fedora_version }}
-        run: test/test.sh ${{ matrix.fedora_version }} user,zsh,vscode,ansible
+        run: test/test.sh ${{ matrix.fedora_version }} user,zsh,vscode,ansible,go,kubernetes

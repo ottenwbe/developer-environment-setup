@@ -7,12 +7,12 @@
       tags: user
     - role: zsh
       tags: zsh
-    - role: common
-      tags: common
     - role: vscode
       tags: vscode
     - role: ansible
       tags: ansible
+    - role: common
+      tags: common
 
 - name: Development Environment
   hosts: all
@@ -28,3 +28,5 @@
       tags: cpp
     - role: python
       tags: python
+    - role: kubernetes
+      tags: kubernetes
