@@ -1,12 +1,11 @@
 ---
-- name: zsh - install zsh, fonts, and dependencies
+- name: Zsh - install zsh, fonts, and dependencies
   become: true
   ansible.builtin.package:
-    name: "{{ item }}"
+    name:
+      - curl
+      - zsh
+      - powerline
+      - powerline-fonts
+      - fira-code-fonts
     state: present
-  loop:
-    - curl
-    - zsh
-    - powerline
-    - powerline-fonts
-    - fira-code-fonts

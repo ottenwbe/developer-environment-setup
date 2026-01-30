@@ -1,5 +1,5 @@
 ---
-- name: python - install packages
+- name: Python - install packages
   become: true
   ansible.builtin.dnf:
     name: "{{ python_packages }}"

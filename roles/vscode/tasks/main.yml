@@ -1,21 +1,21 @@
 ---
-- name: vscode - add repo
+- name: Vscode - add repo
   become: true
   ansible.builtin.yum_repository:
     name: code
     description: Visual Studio Code
-    gpgcheck: yes
-    enabled: yes
+    gpgcheck: true
+    enabled: true
     file: vscode
     gpgkey: https://packages.microsoft.com/keys/microsoft.asc
     baseurl: https://packages.microsoft.com/yumrepos/vscode
-- name: vscode - install
+- name: Vscode - install
   become: true
   ansible.builtin.dnf:
     name:
       - code
     state: present
-- name: vscode - install extensions
+- name: Vscode - install extensions
   become: true
   become_user: "{{ item.0.username }}"
   ansible.builtin.command:

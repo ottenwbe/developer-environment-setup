@@ -1,5 +1,5 @@
 ---
-- name: tools - install gui and productivity packages
+- name: Tools - install gui and productivity packages
   become: true
   ansible.builtin.dnf:
     name: "{{ common_gui_packages }}"

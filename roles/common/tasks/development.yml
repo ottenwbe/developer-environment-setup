@@ -1,5 +1,5 @@
 ---
-- name: dev dependencies - dnf plugins
+- name: Dev dependencies - dnf plugins
   become: true
   ansible.builtin.dnf:
     name: dnf-plugins-core
@@ -20,7 +20,7 @@
     fingerprint: 79BD B88F 9BBF 7391 0FD4 095B 6A2A F961 9484 3C65
 
 
-- name: common - install rpmfusion
+- name: Common - install rpmfusion
   become: true
   ansible.builtin.dnf:
     name:
@@ -28,7 +28,7 @@
       - "https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ ansible_distribution_major_version }}.noarch.rpm"
     state: present
 
-- name: common - install packages
+- name: Common - install packages
   become: true
   ansible.builtin.dnf:
     name: "{{ common_packages }}"

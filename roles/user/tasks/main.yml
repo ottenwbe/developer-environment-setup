@@ -1,11 +1,11 @@
-- name: user - install dependencies
+- name: User - install dependencies
   become: true
   ansible.builtin.package:
     name:
       - openssh
       - git
     state: present
-- name: home - create the user
+- name: Home - create the user
   become: true
   ansible.builtin.user:
     name: "{{ item.username }}"
@@ -13,9 +13,9 @@
     ssh_key_type: ed25519
     ssh_key_file: .ssh/id_ed25519
     groups: wheel
-    append: yes
-  with_items: "{{ users }}"
-- name: home - create a 'workspace' folder for the user
+    append: true
+  loop: "{{ users }}"
+- name: Home - create a 'workspace' folder for the user
   become: true
   ansible.builtin.file:
     path: "/home/{{ item.username }}/workspace"
@@ -23,8 +23,8 @@
     owner: "{{ item.username }}"
     group: "{{ item.username }}"
     mode: '0755'
-  with_items: "{{ users }}"
-- name: home - create local bin folders
+  loop: "{{ users }}"
+- name: Home - create local bin folders
   become: true
   ansible.builtin.file:
     path: "/home/{{ item[0].username }}/{{ item[1] }}"
@@ -33,7 +33,7 @@
     group: "{{ item[0].username }}"
     mode: '0755'
   loop: "{{ users | product(['bin', '.local/bin']) | list }}"
-- name: user - configure git user.name
+- name: User - configure git user.name
   become: true
   become_user: "{{ item.username }}"
   ansible.builtin.git_config:
@@ -42,7 +42,7 @@
     scope: global
   loop: "{{ users }}"
   when: item.git_name is defined
-- name: user - configure git user.email
+- name: User - configure git user.email
   become: true
   become_user: "{{ item.username }}"
   ansible.builtin.git_config:

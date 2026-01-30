@@ -1,11 +1,11 @@
 ---
-- name: ruby - install packages
+- name: Ruby - install packages
   become: true
   ansible.builtin.dnf:
     name: "{{ ruby_packages }}"
     state: present
 
-- name: ruby - configure global gemrc
+- name: Ruby - configure global gemrc
   become: true
   ansible.builtin.copy:
     dest: /etc/gemrc

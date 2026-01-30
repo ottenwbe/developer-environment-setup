@@ -1,5 +1,5 @@
 ---
-- name: cpp - install packages
+- name: Cpp - install packages
   become: true
   ansible.builtin.dnf:
     name: "{{ cpp_packages }}"

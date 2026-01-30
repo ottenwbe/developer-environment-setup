@@ -1,33 +1,33 @@
 ---
-- name: java - install packages
+- name: Java - install packages
   become: true
   ansible.builtin.dnf:
     name: "{{ java_packages }}"
     state: present
 
-- name: java - download gradle
+- name: Java - download gradle
   become: true
   ansible.builtin.get_url:
     url: "https://services.gradle.org/distributions/gradle-{{ gradle_version }}-bin.zip"
     dest: "/tmp/gradle-{{ gradle_version }}-bin.zip"
     mode: '0644'
 
-- name: java - create gradle directory
+- name: Java - create gradle directory
   become: true
   ansible.builtin.file:
     path: /opt/gradle
     state: directory
     mode: '0755'
 
-- name: java - extract gradle
+- name: Java - extract gradle
   become: true
   ansible.builtin.unarchive:
     src: "/tmp/gradle-{{ gradle_version }}-bin.zip"
     dest: /opt/gradle
-    remote_src: yes
+    remote_src: true
     creates: "/opt/gradle/gradle-{{ gradle_version }}"
 
-- name: java - setup environment variables
+- name: Java - setup environment variables
   become: true
   ansible.builtin.copy:
     dest: /etc/profile.d/java.sh

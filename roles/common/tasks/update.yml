@@ -1,9 +1,9 @@
 ---
-- name: update - upgrade all packages
+- name: Update - upgrade all packages
   become: true
   ansible.builtin.dnf:
     name: "*"
     state: latest
-    update_cache: yes
+    update_cache: true
   tags:
     - update

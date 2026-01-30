@@ -1,5 +1,5 @@
 ---
-- name: ansible - install ansible and linting tools
+- name: Ansible - install ansible and linting tools
   become: true
   ansible.builtin.dnf:
     name:
@@ -7,7 +7,7 @@
       - ansible-lint
       - yamllint
     state: present
-- name: ansible - create default directory structure
+- name: Ansible - create default directory structure
   become: true
   ansible.builtin.file:
     path: "/home/{{ item.0.username }}/.ansible/{{ item.1 }}"

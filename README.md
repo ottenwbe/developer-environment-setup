@@ -55,6 +55,37 @@ On a local Linux installation where ansible is installed the playbook can be exe
 ansible-playbook -i inventory.yml site.yml --connection=local --extra-vars '{"users": [{"username": "your user", "git_name": "Your Name", "git_email": "email@example.com"}]}' --ask-become-pass
 ```
 
+## Tags 
+
+The playbook uses tags to allow running specific parts of the setup. 
+
+Available tags: 
+* system: Runs all system setup roles (user, zsh, vscode, ansible, common) 
+* dev: Runs all development environment roles (go, java, ruby, cpp, python, kubernetes, virtualization) 
+* user: User creation and configuration 
+* zsh: ZSH shell setup 
+* vscode: Visual Studio Code installation 
+* ansible: Ansible installation 
+* common: Common tools and repositories 
+* go: Go development environment 
+* java: Java development environment 
+* ruby: Ruby development environment 
+* cpp: C++ development environment 
+* python: Python development environment 
+* kubernetes: Kubernetes tools (Minikube, Helm, etc.) 
+* virtualization: Virtualization tools (VirtualBox, Vagrant) 
+
+To run only specific tags: 
+```bash 
+ansible-playbook -i inventory.yml site.yml ... --tags "tag1,tag2" 
+```
+
+Or using the bootstrap script (4th argument): 
+
+```bash 
+sh bootstrap_local.sh inventory.yml <extra-vars> Fedora "tag1,tag2"
+```
+
 ## Testing 
 
 The playbook can be tested in a Docker container---more or less.
