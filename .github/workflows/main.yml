@@ -28,4 +28,4 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
       - name: Test Deployment Fedora ${{ matrix.fedora_version }}
-        run: test/test.sh ${{ matrix.fedora_version }} user,zsh,vscode,ansible,go,kubernetes
+        run: test/test.sh ${{ matrix.fedora_version }} all
