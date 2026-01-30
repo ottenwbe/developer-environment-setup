@@ -1,12 +1,12 @@
 ---
-- include_tasks: 
-    file: install.yml
-    apply:
-      environment: 
-        PATH: "~/workspace/go:/opt/go/bin:{{ lookup('env', 'PATH') }}" 
-- include_tasks: 
-    file: dependencies.yml
-    apply:
-      environment: 
-        PATH: "~/workspace/go:/opt/go/bin:{{ lookup('env', 'PATH') }}" 
-
+- name: Go - install package
+  become: true
+  ansible.builtin.dnf:
+    name: golang
+    state: present
+- name: Go - install tools
+  become: true
+  become_user: "{{ item.0.username }}"
+  ansible.builtin.command: "go install {{ item.1 }}"
+  changed_when: false
+  loop: "{{ users | product(go_tools) | list }}"

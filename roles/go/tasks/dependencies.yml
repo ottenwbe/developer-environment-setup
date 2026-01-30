@@ -1,7 +1,0 @@
----
-- name: go - testing - install ginkgo cli
-  command: go get -u github.com/onsi/ginkgo/ginkgo  
-- name: go - testing - install gomega matcher library
-  command: go get -u github.com/onsi/gomega/...     # fetches the matcher library
-- name: go - linting 
-  command: go get -u golang.org/x/lint/golint

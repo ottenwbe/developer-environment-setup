@@ -1,15 +1,15 @@
 ---
-- name: chrome - add google repository
+- name: Chrome - add google repository
   become: true
-  yum_repository:
+  ansible.builtin.yum_repository:
     name: google-chrome
     description: google-chrome - $basearch
-    gpgcheck: yes
-    enabled: yes
+    gpgcheck: true
+    enabled: true
     gpgkey: https://dl-ssl.google.com/linux/linux_signing_key.pub
-    baseurl: http://dl.google.com/linux/chrome/rpm/stable/$basearch
-- name: chrome - install
+    baseurl: https://dl.google.com/linux/chrome/rpm/stable/$basearch
+- name: Chrome - install
   become: true
-  dnf:
+  ansible.builtin.dnf:
     name: google-chrome-stable
-    state: latest
+    state: present

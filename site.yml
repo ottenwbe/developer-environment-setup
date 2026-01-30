@@ -1,21 +1,34 @@
 ---
-- hosts: all  
-  tasks:
-  - include_role:
-      name: user  
-  - include_role:
-      name: common
-  - include_role:
-      name: zsh
-  - include_role:
-      name: go
-  - include_role:
-      name: java
-  - include_role:
-      name: ruby
-  - include_role:
-      name: cpp
-  - include_role:
-      name: python
-  - include_role:
-      name: ansible          
+- name: System Setup
+  hosts: all
+  tags: system
+  roles:
+    - role: user
+      tags: user
+    - role: zsh
+      tags: zsh
+    - role: vscode
+      tags: vscode
+    - role: ansible
+      tags: ansible
+    - role: common
+      tags: common
+
+- name: Development Environment
+  hosts: all
+  tags: dev
+  roles:
+    - role: go
+      tags: go
+    - role: java
+      tags: java
+    - role: ruby
+      tags: ruby
+    - role: cpp
+      tags: cpp
+    - role: python
+      tags: python
+    - role: kubernetes
+      tags: kubernetes
+    - role: virtualization
+      tags: virtualization

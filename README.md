@@ -1,14 +1,15 @@
 # developer-environment-setup
 
+[![Test Developer Environment Setup](https://github.com/ottenwbe/developer-environment-setup/actions/workflows/main.yml/badge.svg)](https://github.com/ottenwbe/developer-environment-setup/actions/workflows/main.yml)
+
 This ansible playbook is used by me to automate the setup of my Linux developer machines. 
-If you frequently reinstall your system, you know why these scripts had been created.
+If you frequently reinstall your system, you know why these scripts were created.
 Therefore, this repository will be updated whenever I setup a new machine (commits to master).
 
 ## Supported Linux Distributions
 
 Right now the only tested Distributions are:
-* Fedora 33
-* Fedora 34
+* Fedora 43
 
 ## Structure
 
@@ -21,11 +22,15 @@ Right now the only tested Distributions are:
 │   ├── common          // Installation of common tools, external repos (rpm-fusion...), etc. 
 │   ├── user            // Creation of users
 │   ├── zsh             // Installation of zsh for each user
+│   ├── vscode          // Installation of Visual Studio Code
+│   ├── ansible         // Installation of Ansible and linting tools
 │   ├── cpp             // Everything needed for C(pp) development
 │   ├── go              // Everything needed for Golang development
 │   ├── java            // Everything needed for Java development
+│   ├── kubernetes      // Everything needed for Kubernetes development (minikube, helm, ...)
 │   ├── python          // Everything needed for Python development
 │   └── ruby            // Everything needed for Ruby development       
+│   └── virtualization  // Virtualization tools (VirtualBox, Vagrant)
 └── test/               // Test the playbook in docker images
     └── docker/
 ```
@@ -42,20 +47,43 @@ The ```bootstrap_local.sh``` script installs ansible as a prerequisite for execu
 On a local Fedora installation where ansible is __not__ installed the playbook can be executed as follows:
 
 ```bash
-sh bootstrap_local.sh hosts <your user> Fedora
+sh bootstrap_local.sh inventory.yml <your user> Fedora
 ```
 
 On a local Linux installation where ansible is installed the playbook can be executed as follows:
 ```bash
-ansible-playbook -i hosts site.yml --connection=local --extra-vars '{"users": ["your user"]}' --ask-become-pass
+ansible-playbook -i inventory.yml site.yml --connection=local --extra-vars '{"users": [{"username": "your user", "git_name": "Your Name", "git_email": "email@example.com"}]}' --ask-become-pass
 ```
 
-### Go Specific Details
+## Tags 
 
-You can specify a specific go version to install. 
+The playbook uses tags to allow running specific parts of the setup. 
 
-```yaml
-"go_version": "1.17.1.linux-amd64"
+Available tags: 
+* system: Runs all system setup roles (user, zsh, vscode, ansible, common) 
+* dev: Runs all development environment roles (go, java, ruby, cpp, python, kubernetes, virtualization) 
+* user: User creation and configuration 
+* zsh: ZSH shell setup 
+* vscode: Visual Studio Code installation 
+* ansible: Ansible installation 
+* common: Common tools and repositories 
+* go: Go development environment 
+* java: Java development environment 
+* ruby: Ruby development environment 
+* cpp: C++ development environment 
+* python: Python development environment 
+* kubernetes: Kubernetes tools (Minikube, Helm, etc.) 
+* virtualization: Virtualization tools (VirtualBox, Vagrant) 
+
+To run only specific tags: 
+```bash 
+ansible-playbook -i inventory.yml site.yml ... --tags "tag1,tag2" 
+```
+
+Or using the bootstrap script (4th argument): 
+
+```bash 
+sh bootstrap_local.sh inventory.yml <extra-vars> Fedora "tag1,tag2"
 ```
 
 ## Testing 
@@ -73,14 +101,14 @@ chcon -Rt svirt_sandbox_file_t "${PWD}"
 On a non SELinux you can simply build a docker image and execute the playbook in a container. Replace one of the 'testuser's' with a username that suits you and run the following commands:
 
 ```bash
-docker build --file=test/docker/Dockerfile.fedora --build-arg "FEDORA_VERSION=33" --tag=fedora33:ansible test/docker
-docker run --name=test-fedora --volume="${PWD}":/home/ansible:ro fedora33:ansible ansible-playbook -i /home/ansible/test/docker/test_hosts /home/ansible site.yml --connection=local --become --extra-vars '{"users": ["testuser1","testuser2"], "go_version": "1.17.2.linux-amd64" "}' --skip-tags "systemd"
+docker build --file=test/docker/Dockerfile.fedora --build-arg "FEDORA_VERSION=43" --tag=fedora43:ansible test/docker
+docker run --name=test-fedora --rm --volume="${PWD}":/home/ansible:ro fedora43:ansible ansible-playbook -i /home/ansible/test/docker/inventory.yml /home/ansible/site.yml --connection=local --become --extra-vars '{"users": [{"username": "testuser1"}, {"username": "testuser2"}]}' --skip-tags "common"
 ```
 
 or simply use the test scripts
 
 ```bash
-sh test/test.sh 33
+sh test/test.sh 43 all
 ```
 
 __Note__: We skip everything related to systemd, since systemd is not monitoring our services in the container. 

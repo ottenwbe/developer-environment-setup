@@ -1,21 +1,15 @@
 ---
-- name: ruby - basic install
-  package: name={{ item }} state=latest
+- name: Ruby - install packages
   become: true
-  with_items:
-    - ruby
-    - ruby-devel
-- name: ruby - dependencies for native extensions on Red Hat
-  become: true
-  dnf:
-    name=redhat-rpm-config  state=latest
-  when:
-    ansible_os_family == "RedHat"
-- name: ruby - installation of default gems
-  ## executing as command is a workaround for the current gem bug: https://github.com/ansible/ansible/issues/50434
-  command: "gem install {{ item }}"
-  with_items:
-    - bundler
-    - rake
-    - rspec
+  ansible.builtin.dnf:
+    name: "{{ ruby_packages }}"
+    state: present
 
+- name: Ruby - configure global gemrc
+  become: true
+  ansible.builtin.copy:
+    dest: /etc/gemrc
+    content: |
+      install: --no-document
+      update: --no-document
+    mode: '0644'

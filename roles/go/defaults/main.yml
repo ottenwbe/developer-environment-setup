@@ -1,4 +1,5 @@
 ---
-go_version: 1.17.2.linux-amd64
-gopath_path: ~/workspace/go
-goroot_path: /opt/go
+go_tools:
+  - github.com/onsi/ginkgo/v2/ginkgo@latest
+  - github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+  - github.com/swaggo/swag/cmd/swag@latest

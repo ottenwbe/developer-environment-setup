@@ -1,20 +1,6 @@
-- name: tools - general
+---
+- name: Tools - install gui and productivity packages
   become: true
-  package: name={{ item }} state=latest
-  with_items:
-    - curl
-    - keepassxc
-- name: tools - productivity
-  become: true
-  package: name={{ item }} state=latest
-  with_items:
-    - git
-    - vagrant    
-- name: tools - productivity
-  become: true
-  package: name={{ item }} state=latest
-  with_items:
-    - vim
-    - nano
-    - evince
-    - libreoffice    
+  ansible.builtin.dnf:
+    name: "{{ common_gui_packages }}"
+    state: present

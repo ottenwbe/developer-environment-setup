@@ -1,0 +1,6 @@
+---
+ruby_packages:
+  - ruby
+  - ruby-devel
+  - rubygem-bundler
+  - redhat-rpm-config

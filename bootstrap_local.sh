@@ -1,33 +1,42 @@
 #!/usr/bin/env bash
 
-echo "== BEGIN BOOTSTRAP =="
+# Ensure we are in the script directory
+cd "$(dirname "$0")"
 
-hostfile=$1
-user=$2
-system=$3
+inventoryfile=${1:-}
+extra_vars=${2:-}
+system=${3:-Fedora}
+tags=${4:-all}
+start_sshd=${5:-true}
 
 set -uex pipefail
 
-if [ -z "${hostfile}" -o -z "${user}" ] ; then
-  echo "usage: ./bootstrap_local.sh <path-to-host-file> <user> [<Fedora>]"
+if [ -z "${inventoryfile}" ] || [ -z "${extra_vars}" ] ; then
+  echo "usage: ./bootstrap_local.sh <path-to-host-file> <extra-vars-json> [<Fedora> [<all|tag1,tag2> [<start_sshd>]]]"
   exit 1
 fi
 
-if [ -z "${system}" ] ; then
-    system="Fedora"
-fi
-
+echo "== BEGIN BOOTSTRAP =="
 echo "== SETUP ${system} =="
 if [ "${system}" == "Fedora" ] ; then
 	echo "== Ensure Python on Fedora=="
 	sudo dnf -y install python3 python3-pip
-  echo "== Start ssh service on Fedora=="
-	sudo systemctl start sshd
+	if [ "${start_sshd}" == "true" ]; then
+		echo "== Start ssh service on Fedora=="
+		sudo systemctl start sshd
+	fi
 fi
 
-echo "== INSTALL ANSIBLE (AND PREREQUISITES)=="
-pip3 install -r requirements.txt
+echo "== SETUP VIRTUAL ENVIRONMENT =="
+if [ ! -d ".venv" ]; then
+    python3 -m venv .venv
+fi
+source .venv/bin/activate
 
-ansible-playbook -i hosts site.yml --connection=local --extra-vars "{\"users\": [\"${user}\"]}" --ask-become-pass
+echo "== INSTALL ANSIBLE (AND PREREQUISITES)=="
+pip install --upgrade pip
+pip install -r requirements.txt
+
+ansible-playbook -i "${inventoryfile}" site.yml --connection=local --extra-vars "${extra_vars}" --become --tags "${tags}"
 
 echo "== END BOOTSTRAP =="

@@ -1,19 +1,53 @@
----
-- name: user - keygen dependency
+- name: User - install dependencies
   become: true
-  package: name=openssh state=present
-- name: home - create the user
+  ansible.builtin.package:
+    name:
+      - openssh
+      - git
+    state: present
+- name: Home - create the user
   become: true
-  user:
-    name: "{{ item }}"
-    generate_ssh_key: yes
-    ssh_key_bits: 2048
-    ssh_key_file: .ssh/id_rsa
-  with_items: "{{ users }}"
-- name: home - create a 'workspace' folder for the user
-  file:
-    path: "/home/{{ item }}/workspace"
+  ansible.builtin.user:
+    name: "{{ item.username }}"
+    generate_ssh_key: "{{ generate_ssh_key }}"
+    ssh_key_type: ed25519
+    ssh_key_file: .ssh/id_ed25519
+    groups: wheel
+    append: true
+  loop: "{{ users }}"
+- name: Home - create a 'workspace' folder for the user
+  become: true
+  ansible.builtin.file:
+    path: "/home/{{ item.username }}/workspace"
     state: directory
-    mode: 0755
-    owner: "{{ item }}"
-  with_items: "{{ users }}"
+    owner: "{{ item.username }}"
+    group: "{{ item.username }}"
+    mode: '0755'
+  loop: "{{ users }}"
+- name: Home - create local bin folders
+  become: true
+  ansible.builtin.file:
+    path: "/home/{{ item[0].username }}/{{ item[1] }}"
+    state: directory
+    owner: "{{ item[0].username }}"
+    group: "{{ item[0].username }}"
+    mode: '0755'
+  loop: "{{ users | product(['bin', '.local/bin']) | list }}"
+- name: User - configure git user.name
+  become: true
+  become_user: "{{ item.username }}"
+  ansible.builtin.git_config:
+    name: user.name
+    value: "{{ item.git_name }}"
+    scope: global
+  loop: "{{ users }}"
+  when: item.git_name is defined
+- name: User - configure git user.email
+  become: true
+  become_user: "{{ item.username }}"
+  ansible.builtin.git_config:
+    name: user.email
+    value: "{{ item.git_email }}"
+    scope: global
+  loop: "{{ users }}"
+  when: item.git_email is defined
