@@ -101,8 +101,8 @@ chcon -Rt svirt_sandbox_file_t "${PWD}"
 On a non SELinux you can simply build a docker image and execute the playbook in a container. Replace one of the 'testuser's' with a username that suits you and run the following commands:
 
 ```bash
-docker build --file=test/docker/Dockerfile.fedora --build-arg "FEDORA_VERSION=33" --tag=fedora33:ansible test/docker
-docker run --name=test-fedora --volume="${PWD}":/home/ansible:ro fedora33:ansible ansible-playbook -i /home/ansible/test/docker/inventory.yml /home/ansible site.yml --connection=local --become --extra-vars '{"users": [{"username": "testuser1"}, {"username": "testuser2"}], "go_version": "1.17.2.linux-amd64"}' --skip-tags "systemd"
+docker build --file=test/docker/Dockerfile.fedora --build-arg "FEDORA_VERSION=43" --tag=fedora43:ansible test/docker
+docker run --name=test-fedora --rm --volume="${PWD}":/home/ansible:ro fedora43:ansible ansible-playbook -i /home/ansible/test/docker/inventory.yml /home/ansible/site.yml --connection=local --become --extra-vars '{"users": [{"username": "testuser1"}, {"username": "testuser2"}]}' --skip-tags "common"
 ```
 
 or simply use the test scripts
