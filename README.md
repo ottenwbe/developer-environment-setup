@@ -49,7 +49,7 @@ The ```bootstrap_local.sh``` script installs ansible as a prerequisite for execu
 On a local Fedora installation where ansible is __not__ installed the playbook can be executed as follows:
 
 ```bash
-sh bootstrap_local.sh inventory.yml <your user> Fedora
+sh bootstrap_local.sh inventory.yml <your user> Fedora all true
 ```
 
 On a local Linux installation where ansible is installed the playbook can be executed as follows:
@@ -86,7 +86,7 @@ ansible-playbook -i inventory.yml site.yml ... --tags "tag1,tag2"
 Or using the bootstrap script (4th argument): 
 
 ```bash 
-sh bootstrap_local.sh inventory.yml <extra-vars> Fedora "tag1,tag2"
+sh bootstrap_local.sh inventory.yml <extra-vars> Fedora "tag1,tag2" true 
 ```
 
 ## Configuration 
