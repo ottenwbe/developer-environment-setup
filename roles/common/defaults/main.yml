@@ -14,14 +14,14 @@ common_cli_packages:
   - zip
   - nano
   - bind-utils
-  
+
 common_gui_packages:
   - evince
   - libreoffice
 
-flatpak_packages:
+common_flatpak_packages:
   - org.kde.krita
   - org.kde.okular
   - org.keepassxc.KeePassXC
 
-git_repositories: []
+common_git_repositories: []

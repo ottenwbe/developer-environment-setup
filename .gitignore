@@ -3,5 +3,7 @@ vars.json
 *.retry
 .idea/
 .vagrant/
+.ansible
+.vscode
 
 cid

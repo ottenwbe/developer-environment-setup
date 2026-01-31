@@ -22,4 +22,4 @@
   community.general.flatpak:
     name: "{{ item }}"
     state: present
-  loop: "{{ flatpak_packages }}"
+  loop: "{{ common_flatpak_packages }}"

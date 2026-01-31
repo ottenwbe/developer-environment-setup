@@ -4,6 +4,14 @@
   ansible.builtin.dnf:
     name: golang
     state: present
+- name: Go - setup environment variables
+  become: true
+  ansible.builtin.copy:
+    dest: /etc/profile.d/go.sh
+    content: |
+      export GOPATH=$HOME/go
+      export PATH=$PATH:$GOPATH/bin
+    mode: '0644'
 - name: Go - install tools
   become: true
   become_user: "{{ item.0.username }}"
