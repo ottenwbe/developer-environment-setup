@@ -46,13 +46,29 @@ git clone https://github.com/ottenwbe/developer-environment-setup.git
 ```
 
 The ```bootstrap_local.sh``` script installs ansible as a prerequisite for executing the playbook.
-On a local Fedora installation where ansible is __not__ installed the playbook can be executed as follows:
+On a local Fedora installation where ansible is __not__ (yet) installed the playbook can be executed as follows. The playbook will install ansible and start sshd:
 
 ```bash
-sh bootstrap_local.sh inventory.yml <your user> Fedora all true
+sh bootstrap_local.sh inventory.yml @vars.json
 ```
 
-On a local Linux installation where ansible is installed the playbook can be executed as follows:
+This expects a simple config, vars.json, like this to setup your users and all configurations in their respective home directories:
+
+```json
+{
+  "users": [
+    {
+      "username": "user1",
+    },
+    {
+      "username": "user2",
+    }
+  ]    
+}
+```
+
+On a local Linux installation where ansible is installed the playbook can be executed as follows. NOTE: in this example the [git config](https://git-scm.com/docs/git-config) is updated as well for the user, which is an optional step:
+
 ```bash
 ansible-playbook -i inventory.yml site.yml --connection=local --extra-vars '{"users": [{"username": "your user", "git_name": "Your Name", "git_email": "email@example.com"}]}' --ask-become-pass
 ```
