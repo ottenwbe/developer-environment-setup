@@ -1,8 +1,12 @@
 - name: Common - include update tasks
   ansible.builtin.include_tasks: update.yml
-- name: Common - include tools tasks
-  ansible.builtin.include_tasks: tools.yml
+- name: Common - include repository tasks
+  ansible.builtin.include_tasks: repositories.yml
+- name: Common - include cli tasks
+  ansible.builtin.include_tasks: cli.yml
+- name: Common - include gui tasks
+  ansible.builtin.include_tasks: gui.yml
+- name: Common - include flatpak tasks
+  ansible.builtin.include_tasks: flatpak.yml
 - name: Common - include chrome tasks
   ansible.builtin.include_tasks: chrome.yml
-- name: Common - include development tasks
-  ansible.builtin.include_tasks: development.yml

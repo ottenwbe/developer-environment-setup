@@ -1,5 +1,5 @@
 .venv
-secrets.json
+vars.json
 *.retry
 .idea/
 .vagrant/

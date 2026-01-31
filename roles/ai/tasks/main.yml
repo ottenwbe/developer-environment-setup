@@ -1,0 +1,15 @@
+---
+- name: AI - Install Ollama
+  become: true
+  ansible.builtin.shell:
+    cmd: curl -fsSL https://ollama.com/install.sh | sh
+    creates: /usr/local/bin/ollama
+
+- name: AI - Install Python AI tools
+  become: true
+  become_user: "{{ item.username }}"
+  ansible.builtin.pip:
+    name: "{{ ai_python_packages }}"
+    state: present
+    extra_args: "--user"
+  loop: "{{ users }}"

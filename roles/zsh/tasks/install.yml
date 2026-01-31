@@ -4,6 +4,7 @@
   ansible.builtin.package:
     name:
       - curl
+      - git
       - zsh
       - powerline
       - powerline-fonts

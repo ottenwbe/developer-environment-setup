@@ -1,5 +1,5 @@
 ---
-common_packages:
+common_cli_packages:
   - git
   - git-lfs
   - curl
@@ -18,3 +18,10 @@ common_packages:
 common_gui_packages:
   - evince
   - libreoffice
+
+flatpak_packages:
+  - org.kde.krita
+  - org.kde.okular
+  - org.keepassxc.KeePassXC
+
+git_repositories: []

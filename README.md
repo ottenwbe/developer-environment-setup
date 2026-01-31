@@ -30,7 +30,9 @@ Right now the only tested Distributions are:
 │   ├── kubernetes      // Everything needed for Kubernetes development (minikube, helm, ...)
 │   ├── python          // Everything needed for Python development
 │   └── ruby            // Everything needed for Ruby development       
-│   └── virtualization  // Virtualization tools (VirtualBox, Vagrant)
+│   ├── virtualization  // Virtualization tools (VirtualBox, Vagrant)
+│   └── intellij        // Installation of IntelliJ IDEA
+│   └── ai              // AI tools (Ollama, PyTorch, Jupyter)
 └── test/               // Test the playbook in docker images
     └── docker/
 ```
@@ -44,13 +46,29 @@ git clone https://github.com/ottenwbe/developer-environment-setup.git
 ```
 
 The ```bootstrap_local.sh``` script installs ansible as a prerequisite for executing the playbook.
-On a local Fedora installation where ansible is __not__ installed the playbook can be executed as follows:
+On a local Fedora installation where ansible is __not__ (yet) installed the playbook can be executed as follows. The playbook will install ansible and start sshd:
 
 ```bash
-sh bootstrap_local.sh inventory.yml <your user> Fedora
+sh bootstrap_local.sh inventory.yml @vars.json
 ```
 
-On a local Linux installation where ansible is installed the playbook can be executed as follows:
+This expects a simple config, vars.json, like this to setup your users and all configurations in their respective home directories:
+
+```json
+{
+  "users": [
+    {
+      "username": "user1",
+    },
+    {
+      "username": "user2",
+    }
+  ]    
+}
+```
+
+On a local Linux installation where ansible is installed the playbook can be executed as follows. NOTE: in this example the [git config](https://git-scm.com/docs/git-config) is updated as well for the user, which is an optional step:
+
 ```bash
 ansible-playbook -i inventory.yml site.yml --connection=local --extra-vars '{"users": [{"username": "your user", "git_name": "Your Name", "git_email": "email@example.com"}]}' --ask-become-pass
 ```
@@ -74,6 +92,7 @@ Available tags:
 * python: Python development environment 
 * kubernetes: Kubernetes tools (Minikube, Helm, etc.) 
 * virtualization: Virtualization tools (VirtualBox, Vagrant) 
+* intellij: IntelliJ IDEA installation
 
 To run only specific tags: 
 ```bash 
@@ -83,8 +102,18 @@ ansible-playbook -i inventory.yml site.yml ... --tags "tag1,tag2"
 Or using the bootstrap script (4th argument): 
 
 ```bash 
-sh bootstrap_local.sh inventory.yml <extra-vars> Fedora "tag1,tag2"
+sh bootstrap_local.sh inventory.yml <extra-vars> Fedora "tag1,tag2" true 
 ```
+
+## Configuration 
+
+You can customize the installation by overriding default variables using --extra-vars. 
+
+For example, if you have the need to install IntelliJ IDEA Ultimate instead of the default Community edition: 
+
+```bash 
+ansible-playbook ... --extra-vars '{"intellij_edition": "ultimate"}' 
+``` 
 
 ## Testing 
 

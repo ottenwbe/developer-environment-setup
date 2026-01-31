@@ -18,7 +18,7 @@
 - name: Virtualbox - install current kernel headers
   become: true
   ansible.builtin.dnf:
-    name: "kernel-devel-{{ ansible_kernel }}"
+    name: "kernel-devel-{{ ansible_facts['kernel'] }}"
     state: present
   ignore_errors: true
 
@@ -36,7 +36,16 @@
 - name: Virtualbox - load kernel module
   become: true
   ansible.builtin.command: modprobe vboxdrv
+  register: vbox_modprobe
   changed_when: false
+  failed_when: false
+
+- name: Virtualbox - handle module load error
+  ansible.builtin.fail:
+    msg: >
+      Unable to load VirtualBox kernel module.
+      Original Error: {{ vbox_modprobe.stderr }}
+  when: vbox_modprobe.rc != 0
   ignore_errors: true
 
 - name: Virtualbox - add users to vboxusers group

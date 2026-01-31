@@ -1,4 +1,18 @@
 ---
+- name: Kubernetes - install podman
+  become: true
+  ansible.builtin.dnf:
+    name: podman
+    state: present
+
+- name: Kubernetes - quiet podman-docker emulation message
+  become: true
+  ansible.builtin.copy:
+    content: ""
+    dest: /etc/containers/nodocker
+    force: false
+    mode: '0644'
+
 - name: Kubernetes - install packages
   become: true
   ansible.builtin.dnf:

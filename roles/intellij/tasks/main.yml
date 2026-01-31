@@ -1,0 +1,41 @@
+---
+# IntelliJ often requires a higher limit for file watchers to handle large projects
+- name: IntelliJ - increase fs.inotify.max_user_watches
+  become: true
+  ansible.posix.sysctl:
+    name: fs.inotify.max_user_watches
+    value: '524288'
+    state: present
+    reload: true
+
+- name: IntelliJ - ensure install directory exists
+  become: true
+  ansible.builtin.file:
+    path: "{{ intellij_install_dir }}"
+    state: directory
+    mode: '0755'
+
+- name: IntelliJ - download and unarchive
+  become: true
+  ansible.builtin.unarchive:
+    src: "https://download.jetbrains.com/idea/idea{{ 'IC' if intellij_edition == 'community' else 'IU' }}-{{ intellij_version }}.tar.gz"
+    dest: "{{ intellij_install_dir }}"
+    remote_src: true
+    extra_opts: [--strip-components=1]
+    creates: "{{ intellij_install_dir }}/bin/idea.sh"
+
+- name: IntelliJ - create symlink
+  become: true
+  ansible.builtin.file:
+    src: "{{ intellij_install_dir }}/bin/idea.sh"
+    dest: /usr/local/bin/idea
+    state: link
+  when: intellij_create_symlink
+
+- name: IntelliJ - create desktop entry
+  become: true
+  ansible.builtin.template:
+    src: jetbrains-idea.desktop.j2
+    dest: /usr/share/applications/jetbrains-idea.desktop
+    mode: '0644'
+  when: intellij_create_desktop_entry

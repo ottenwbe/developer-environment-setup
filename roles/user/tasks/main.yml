@@ -3,7 +3,6 @@
   ansible.builtin.package:
     name:
       - openssh
-      - git
     state: present
 - name: Home - create the user
   become: true
@@ -33,21 +32,3 @@
     group: "{{ item[0].username }}"
     mode: '0755'
   loop: "{{ users | product(['bin', '.local/bin']) | list }}"
-- name: User - configure git user.name
-  become: true
-  become_user: "{{ item.username }}"
-  ansible.builtin.git_config:
-    name: user.name
-    value: "{{ item.git_name }}"
-    scope: global
-  loop: "{{ users }}"
-  when: item.git_name is defined
-- name: User - configure git user.email
-  become: true
-  become_user: "{{ item.username }}"
-  ansible.builtin.git_config:
-    name: user.email
-    value: "{{ item.git_email }}"
-    scope: global
-  loop: "{{ users }}"
-  when: item.git_email is defined
