@@ -1,8 +1,15 @@
 ---
+- name: AI - Download Ollama installer
+  become: true
+  ansible.builtin.get_url:
+    url: https://ollama.com/install.sh
+    dest: /tmp/ollama_install.sh
+    mode: '0755'
+
 - name: AI - Install Ollama
   become: true
-  ansible.builtin.shell:
-    cmd: curl -fsSL https://ollama.com/install.sh | sh
+  ansible.builtin.command:
+    cmd: /tmp/ollama_install.sh
     creates: /usr/local/bin/ollama
 
 - name: AI - Install Python AI tools
