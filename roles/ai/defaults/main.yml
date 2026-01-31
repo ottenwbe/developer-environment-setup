@@ -1,0 +1,9 @@
+---
+ai_python_packages:
+  - jupyterlab
+  - huggingface_hub
+  - torch
+  - torchvision
+  - torchaudio
+  - pandas
+  - numpy

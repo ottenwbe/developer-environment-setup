@@ -1,0 +1,15 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base"
+  ],
+  "regexManagers": [
+    {
+      "description": "Update Fedora version in GitHub Actions",
+      "fileMatch": ["^\\.github/workflows/main\\.yml$"],
+      "matchStrings": ["fedora_version: \\[(?<currentValue>\\d+)\\]"],
+      "datasourceTemplate": "docker",
+      "depNameTemplate": "fedora"
+    }
+  ]
+}

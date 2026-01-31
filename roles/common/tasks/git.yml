@@ -1,0 +1,36 @@
+---
+- name: Git - install
+  become: true
+  ansible.builtin.package:
+    name: git
+    state: present
+
+- name: Git - configure user.name
+  become: true
+  become_user: "{{ item.username }}"
+  ansible.builtin.git_config:
+    name: user.name
+    value: "{{ item.git_name }}"
+    scope: global
+  loop: "{{ users }}"
+  when: item.git_name is defined
+
+- name: Git - configure user.email
+  become: true
+  become_user: "{{ item.username }}"
+  ansible.builtin.git_config:
+    name: user.email
+    value: "{{ item.git_email }}"
+    scope: global
+  loop: "{{ users }}"
+  when: item.git_email is defined
+
+- name: Git - clone repositories
+  become: true
+  become_user: "{{ item.0.username }}"
+  ansible.builtin.git:
+    repo: "{{ item.1.repo }}"
+    dest: "/home/{{ item.0.username }}/workspace/{{ item.1.dest | default(item.1.repo | basename | regex_replace('\\.git$', '')) }}"
+    version: "{{ item.1.version | default('HEAD') }}"
+  loop: "{{ users | product(git_repositories) | list }}"
+  when: git_repositories is defined

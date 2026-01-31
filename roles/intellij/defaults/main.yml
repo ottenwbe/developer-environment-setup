@@ -1,0 +1,7 @@
+---
+# Options: community, ultimate
+intellij_edition: community
+intellij_version: '2025.3.2'
+intellij_install_dir: "/opt/idea{{ 'IC' if intellij_edition == 'community' else 'IU' }}"
+intellij_create_desktop_entry: false
+intellij_create_symlink: true

@@ -5,8 +5,6 @@ name: Test Developer Environment Setup
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
-  push:
-    branches: [ '**' ]
   pull_request:
     branches: [ master ]
 
@@ -28,4 +26,5 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
       - name: Test Deployment Fedora ${{ matrix.fedora_version }}
-        run: test/test.sh ${{ matrix.fedora_version }} all
+        # some roles are skipped for efficiency of the github workflow, local test should still be executed with "all"
+        run: test/test.sh ${{ matrix.fedora_version }} "user,zsh,ansible,common,go,java,ruby,cpp,python"

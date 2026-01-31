@@ -1,0 +1,25 @@
+---
+- name: Flatpak - install package
+  become: true
+  ansible.builtin.dnf:
+    name: flatpak
+    state: present
+
+- name: Add Flathub remote
+  become: true
+  ansible.builtin.command:
+    cmd: flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+  changed_when: false
+
+- name: Flatpak - enable flathub remote
+  become: true
+  ansible.builtin.command:
+    cmd: flatpak remote-modify --enable flathub
+  changed_when: false
+
+- name: Flatpak - install applications
+  become: true
+  community.general.flatpak:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ flatpak_packages }}"

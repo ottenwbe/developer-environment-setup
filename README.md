@@ -30,7 +30,9 @@ Right now the only tested Distributions are:
 │   ├── kubernetes      // Everything needed for Kubernetes development (minikube, helm, ...)
 │   ├── python          // Everything needed for Python development
 │   └── ruby            // Everything needed for Ruby development       
-│   └── virtualization  // Virtualization tools (VirtualBox, Vagrant)
+│   ├── virtualization  // Virtualization tools (VirtualBox, Vagrant)
+│   └── intellij        // Installation of IntelliJ IDEA
+│   └── ai              // AI tools (Ollama, PyTorch, Jupyter)
 └── test/               // Test the playbook in docker images
     └── docker/
 ```
@@ -74,6 +76,7 @@ Available tags:
 * python: Python development environment 
 * kubernetes: Kubernetes tools (Minikube, Helm, etc.) 
 * virtualization: Virtualization tools (VirtualBox, Vagrant) 
+* intellij: IntelliJ IDEA installation
 
 To run only specific tags: 
 ```bash 
@@ -85,6 +88,16 @@ Or using the bootstrap script (4th argument):
 ```bash 
 sh bootstrap_local.sh inventory.yml <extra-vars> Fedora "tag1,tag2"
 ```
+
+## Configuration 
+
+You can customize the installation by overriding default variables using --extra-vars. 
+
+For example, if you have the need to install IntelliJ IDEA Ultimate instead of the default Community edition: 
+
+```bash 
+ansible-playbook ... --extra-vars '{"intellij_edition": "ultimate"}' 
+``` 
 
 ## Testing 
 

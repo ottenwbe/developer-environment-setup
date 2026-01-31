@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=IntelliJ IDEA {{ 'Community' if intellij_edition == 'community' else 'Ultimate' }}
+Icon={{ intellij_install_dir }}/bin/idea.svg
+Exec="{{ intellij_install_dir }}/bin/idea.sh" %f
+Comment=Capable and Ergonomic IDE for JVM
+Categories=Development;IDE;
+Terminal=false
+StartupWMClass=jetbrains-idea
