@@ -1,2 +1,5 @@
 ---
 generate_ssh_key: false
+
+# Home directory path by OS
+user_home_base_dir: "{{ '/Users' if ansible_facts['os_family'] == 'Darwin' else '/home' }}"

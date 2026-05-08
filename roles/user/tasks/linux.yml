@@ -1,0 +1,38 @@
+---
+- name: User - install openssh
+  become: true
+  ansible.builtin.package:
+    name:
+      - openssh
+    state: present
+
+- name: User - create the user
+  become: true
+  ansible.builtin.user:
+    name: "{{ item.username }}"
+    generate_ssh_key: "{{ generate_ssh_key }}"
+    ssh_key_type: ed25519
+    ssh_key_file: .ssh/id_ed25519
+    groups: wheel
+    append: true
+  loop: "{{ users }}"
+
+- name: User - create workspace folder
+  become: true
+  ansible.builtin.file:
+    path: "{{ user_home_base_dir }}/{{ item.username }}/workspace"
+    state: directory
+    owner: "{{ item.username }}"
+    group: "{{ item.username }}"
+    mode: '0755'
+  loop: "{{ users }}"
+
+- name: User - create local bin folders
+  become: true
+  ansible.builtin.file:
+    path: "{{ user_home_base_dir }}/{{ item[0].username }}/{{ item[1] }}"
+    state: directory
+    owner: "{{ item[0].username }}"
+    group: "{{ item[0].username }}"
+    mode: '0755'
+  loop: "{{ users | product(['bin', '.local/bin']) | list }}"

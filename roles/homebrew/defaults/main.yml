@@ -1,0 +1,13 @@
+---
+homebrew_packages:
+  - git
+  - curl
+  - wget
+  - vim
+  - tmux
+  - fzf
+  - jq
+  - htop
+  - tree
+
+homebrew_cask_packages: []

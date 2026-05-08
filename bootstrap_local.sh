@@ -43,6 +43,6 @@ if [ "${ask_become_pass}" == "true" ]; then
   ANSIBLE_ARGS="--ask-become-pass"
 fi
 
-ansible-playbook -i "${inventoryfile}" site.yml --connection=local --extra-vars "${extra_vars}" --tags "${tags}" ${ANSIBLE_ARGS}
+ansible-playbook -i "${inventoryfile}" site-linux.yml --connection=local --extra-vars "${extra_vars}" --tags "${tags}" ${ANSIBLE_ARGS}
 
 echo "== END BOOTSTRAP =="

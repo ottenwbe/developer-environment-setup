@@ -1,0 +1,9 @@
+---
+- name: System Setup
+  hosts: MacOS
+  tags: system
+  roles:
+    - role: user
+      tags: user
+    - role: homebrew
+      tags: homebrew

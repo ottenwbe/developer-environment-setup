@@ -3,5 +3,21 @@ vars.json
 *.retry
 .idea/
 .vagrant/
+inventory.local.yml
+inventory.localhost.yml
+
+.ansible
 
 cid
+
+# User variables
+vars.json
+
+# Python virtual environment
+.venv/
+
+# macOS system files
+.DS_Store
+
+# VS Code specific files
+.vscode/
