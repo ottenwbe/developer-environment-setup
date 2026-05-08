@@ -9,7 +9,7 @@ Therefore, this repository will be updated whenever I setup a new machine (commi
 ## Supported Platforms
 
 Currently tested and supported:
-* Fedora 43 (Linux)
+* Fedora 43, 44 (Linux)
 * macOS (Tahoe)
 
 ## Structure
