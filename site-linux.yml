@@ -1,7 +1,11 @@
 ---
 - name: System Setup
-  hosts: all
+  hosts: Fedora
   tags: system
+  pre_tasks:
+    - name: Gather facts
+      ansible.builtin.setup:
+      tags: always
   roles:
     - role: user
       tags: user
@@ -13,10 +17,16 @@
       tags: ansible
     - role: common
       tags: common
+    - role: system
+      tags: system
 
 - name: Development Environment
-  hosts: all
+  hosts: Fedora
   tags: dev
+  pre_tasks:
+    - name: Gather facts
+      ansible.builtin.setup:
+      tags: always
   roles:
     - role: go
       tags: go

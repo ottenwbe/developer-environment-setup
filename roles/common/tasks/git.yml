@@ -30,7 +30,7 @@
   become_user: "{{ item.0.username }}"
   ansible.builtin.git:
     repo: "{{ item.1.repo }}"
-    dest: "/home/{{ item.0.username }}/workspace/{{ item.1.dest | default(item.1.repo | basename | regex_replace('\\.git$', '')) }}"
+    dest: "{{ user_home_base_dir }}/{{ item.0.username }}/workspace/{{ item.1.dest | default(item.1.repo | basename | regex_replace('\\.git$', '')) }}"
     version: "{{ item.1.version | default('HEAD') }}"
   loop: "{{ users | product(git_repositories) | list }}"
   when: git_repositories is defined

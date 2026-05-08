@@ -1,0 +1,16 @@
+all:
+  children:
+    Fedora:
+      hosts:
+        fedora-dev:
+          ansible_connection: local
+          # For remote SSH connections, use:
+          # ansible_connection: ssh
+          # ansible_user: your_username
+    MacOS:
+      hosts:
+        macos-dev:
+          ansible_connection: local
+          # For remote SSH connections, use:
+          # ansible_connection: ssh
+          # ansible_user: your_username

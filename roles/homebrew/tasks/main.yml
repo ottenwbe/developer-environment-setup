@@ -1,0 +1,20 @@
+---
+- name: Homebrew - install homebrew
+  ansible.builtin.shell: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  args:
+    creates: /opt/homebrew/bin/brew
+  when: ansible_facts['os_family'] == 'Darwin'
+
+- name: Homebrew - install packages
+  community.general.homebrew:
+    name: "{{ homebrew_packages }}"
+    state: present
+  when: ansible_facts['os_family'] == 'Darwin'
+
+- name: Homebrew - install cask packages
+  community.general.homebrew_cask:
+    name: "{{ homebrew_cask_packages }}"
+    state: present
+  when:
+    - ansible_facts['os_family'] == 'Darwin'
+    - homebrew_cask_packages | length > 0

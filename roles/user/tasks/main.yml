@@ -1,34 +1,8 @@
-- name: User - install dependencies
-  become: true
-  ansible.builtin.package:
-    name:
-      - openssh
-    state: present
-- name: Home - create the user
-  become: true
-  ansible.builtin.user:
-    name: "{{ item.username }}"
-    generate_ssh_key: "{{ generate_ssh_key }}"
-    ssh_key_type: ed25519
-    ssh_key_file: .ssh/id_ed25519
-    groups: wheel
-    append: true
-  loop: "{{ users }}"
-- name: Home - create a 'workspace' folder for the user
-  become: true
-  ansible.builtin.file:
-    path: "/home/{{ item.username }}/workspace"
-    state: directory
-    owner: "{{ item.username }}"
-    group: "{{ item.username }}"
-    mode: '0755'
-  loop: "{{ users }}"
-- name: Home - create local bin folders
-  become: true
-  ansible.builtin.file:
-    path: "/home/{{ item[0].username }}/{{ item[1] }}"
-    state: directory
-    owner: "{{ item[0].username }}"
-    group: "{{ item[0].username }}"
-    mode: '0755'
-  loop: "{{ users | product(['bin', '.local/bin']) | list }}"
+---
+- name: User - include Linux specific tasks
+  ansible.builtin.include_tasks: linux.yml
+  when: ansible_facts['os_family'] == 'RedHat'
+
+- name: User - include macOS specific tasks
+  ansible.builtin.include_tasks: macos.yml
+  when: ansible_facts['os_family'] == 'Darwin'
