@@ -1,15 +1,29 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base"
+    "config:recommended"
   ],
-  "regexManagers": [
+  "customManagers": [
     {
-      "description": "Update Fedora version in GitHub Actions",
-      "fileMatch": ["^\\.github/workflows/main\\.yml$"],
-      "matchStrings": ["fedora_version: \\[(?<currentValue>\\d+)\\]"],
-      "datasourceTemplate": "docker",
-      "depNameTemplate": "fedora"
+      "customType": "regex",
+      "fileMatch": ["defaults/main\\.yml$"],
+      "matchStrings": [
+        "(?<variableName>[a-zA-Z0-9_]+_version):\\s*['\"](?<currentValue>.+?)['\"]\\s*#\\s*renovate:\\s*datasource=(?<datasource>.+?)\\s+depName=(?<depName>.+?)(?:\\s+versioning=(?<versioning>.+?))?\\s*\\n"
+      ]
+    },
+    {
+      "customType": "regex",
+      "fileMatch": ["^\\.github/workflows/.+\\.yml$"],
+      "matchStrings": [
+        "fedora_version: \\[(?<currentValue>.+?)\\]\\s*#\\s*renovate:\\s*datasource=(?<datasource>.+?)\\s+depName=(?<depName>.+?)"
+      ]
+    },
+    {
+      "customType": "regex",
+      "fileMatch": ["Dockerfile\\.fedora$"],
+      "matchStrings": [
+        "ARG FEDORA_VERSION=(?<currentValue>.+?)\\s*#\\s*renovate:\\s*datasource=(?<datasource>.+?)\\s+depName=(?<depName>.+?)"
+      ]
     }
   ]
 }

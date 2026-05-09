@@ -3,5 +3,5 @@ java_packages:
   - java-25-openjdk-devel
   - maven
   - unzip
-java_gradle_version: "9.5.0"
+java_gradle_version: "9.5.0" # renovate: datasource=gradle-version depName=gradle
 java_cleanup_old_gradle: false
