@@ -9,6 +9,8 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  issues: write # Required for Dependency Dashboard and other issue-related actions
+  security-events: write # Required to access vulnerability alerts
 
 jobs:
   renovate:
