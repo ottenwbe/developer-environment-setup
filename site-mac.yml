@@ -7,3 +7,7 @@
       tags: user
     - role: homebrew
       tags: homebrew
+    - role: zsh
+      tags: zsh
+    - role: vscode
+      tags: vscode
