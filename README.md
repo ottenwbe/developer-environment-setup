@@ -110,7 +110,13 @@ ansible-playbook -i inventory.local.yml site-mac.yml --extra-vars @vars.json --a
 
 ## Configuration
 
-Create a `vars.json` file to customize your setup (e.g., users, git config, or specific tool versions):
+Create a `vars.json` file to customize your setup. This file allows you to override the default settings defined within each role to suit your specific development needs.
+
+### Keeping Defaults
+
+To keep the default values for any configuration, simply omit that key from your `vars.json`. Ansible follows a strict order of precedence: values provided via the command line (like our `vars.json` passed as `extra-vars`) override everything else. If a variable is missing from your JSON file, the playbook automatically falls back to the values defined in each role's `defaults/main.yml`.
+
+### Configuration Example
 
 ```json
  {
@@ -120,7 +126,20 @@ Create a `vars.json` file to customize your setup (e.g., users, git config, or s
       "git_name": "Your Name",
       "git_email": "email@example.com"
     }
-  ]
+  ],
+  "java_gradle_version": "9.5.0",
+  "java_cleanup_old_gradle": true,
+  "go_tools": [
+    "github.com/onsi/ginkgo/v2/ginkgo@latest"
+  ],
+  "cpp_packages": [
+    "clang",
+    "gcc",
+    "cmake",
+    "ninja-build"
+  ],
+  "intellij_version": "2024.1",
+  "intellij_create_symlink": true
 }
 ```
 

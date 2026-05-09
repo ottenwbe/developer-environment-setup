@@ -11,8 +11,8 @@
     dest: /tmp/RPM-GPG-KEY-rpmfusion-free
     mode: '0644'
     timeout: 30
-  register: _download_free_key
-  until: _download_free_key is success
+  register: common_download_free_key
+  until: common_download_free_key is success
   retries: 5
   delay: 5
 
@@ -29,8 +29,8 @@
     dest: /tmp/RPM-GPG-KEY-rpmfusion-nonfree
     mode: '0644'
     timeout: 30
-  register: _download_nonfree_key
-  until: _download_nonfree_key is success
+  register: common_download_nonfree_key
+  until: common_download_nonfree_key is success
   retries: 5
   delay: 5
 
@@ -43,13 +43,13 @@
 
 - name: Get Fedora Version
   ansible.builtin.command: rpm -E %fedora
-  register: fedora_version
+  register: common_fedora_version
   changed_when: false
 
 - name: Common - install rpmfusion
   become: true
   ansible.builtin.dnf:
     name:
-      - "https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ fedora_version.stdout }}.noarch.rpm"
-      - "https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ fedora_version.stdout }}.noarch.rpm"
+      - "https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ common_fedora_version.stdout }}.noarch.rpm"
+      - "https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ common_fedora_version.stdout }}.noarch.rpm"
     state: present
