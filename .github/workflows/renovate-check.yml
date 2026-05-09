@@ -26,8 +26,8 @@ jobs:
           echo "### 🔍 Renovate Inspection Report" >> $GITHUB_STEP_SUMMARY
           echo "The manual Renovate check has completed in **dry-run** mode." >> $GITHUB_STEP_SUMMARY
           echo "#### What was checked:" >> $GITHUB_STEP_SUMMARY
-          echo "- **Fedora Versions**: Matrix in `main.yml` and `Dockerfile.fedora`" >> $GITHUB_STEP_SUMMARY
-          echo "- **Gradle**: `java_gradle_version` in Java role defaults" >> $GITHUB_STEP_SUMMARY
-          echo "- **IntelliJ**: `intellij_version` in IntelliJ role defaults" >> $GITHUB_STEP_SUMMARY
+          echo "- **Fedora Versions**: Matrix in \`main.yml\` and \`Dockerfile.fedora\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Gradle**: \`java_gradle_version\` in Java role defaults" >> $GITHUB_STEP_SUMMARY
+          echo "- **IntelliJ**: \`intellij_version\` in IntelliJ role defaults" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "👉 **To see the results**: Open the logs for the 'Run Renovate (Dry Run)' step and search for the table under the section **'DRY-RUN: Finished'**." >> $GITHUB_STEP_SUMMARY
