@@ -3,5 +3,30 @@
   "extends": [
     "config:recommended"
   ],
-  "enabledManagers": ["github-actions"]
+  "onboarding": false,
+  "vulnerabilityAlerts": false,
+  "prHourlyLimit": 0,
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": ["defaults/main\\.yml$"],
+      "matchStrings": [
+        "(?<variableName>[a-zA-Z0-9_]+_version):\\s*['\"](?<currentValue>.+?)['\"]\\s*#\\s*renovate:\\s*datasource=(?<datasource>[^\\s]+)\\s+depName=(?<depName>[^\\s]+)(?:\\s+versioning=(?<versioning>[^\\s]+))?"
+      ]
+    },
+    {
+      "customType": "regex",
+      "fileMatch": ["^\\.github/workflows/.+\\.yml$"],
+      "matchStrings": [
+        "fedora_version: \\[(?<currentValue>.+?)\\]\\s*#\\s*renovate:\\s*datasource=(?<datasource>[^\\s]+)\\s+depName=(?<depName>[^\\s]+)"
+      ]
+    },
+    {
+      "customType": "regex",
+      "fileMatch": ["Dockerfile\\.fedora$"],
+      "matchStrings": [
+        "ARG FEDORA_VERSION=(?<currentValue>.+?)\\s*#\\s*renovate:\\s*datasource=(?<datasource>[^\\s]+)\\s+depName=(?<depName>[^\\s]+)"
+      ]
+    }
+  ]
 }
