@@ -1,6 +1,7 @@
 # developer-environment-setup
 
 [![Test Developer Environment Setup](https://github.com/ottenwbe/developer-environment-setup/actions/workflows/main.yml/badge.svg)](https://github.com/ottenwbe/developer-environment-setup/actions/workflows/main.yml)
+[![Ansible](https://img.shields.io/badge/Ansible-2.15+-EE0000?style=flat&logo=ansible)](https://www.ansible.com/)
 
 This ansible playbook is used by me to automate the setup of my developer machines on both Linux and macOS. 
 If you frequently reinstall your system, you know why these scripts were created.

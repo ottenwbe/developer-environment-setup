@@ -1,37 +1,54 @@
 ---
-- name: Java - install packages
+- name: Java - Linux installation
   become: true
-  ansible.builtin.dnf:
-    name: "{{ java_packages }}"
-    state: present
+  when: ansible_facts['os_family'] == 'RedHat'
+  block:
+    - name: Java - install packages
+      ansible.builtin.dnf:
+        name: "{{ java_packages | default(['java-21-openjdk-devel']) }}"
+        state: present
+        update_cache: true
 
-- name: Java - download gradle
-  become: true
-  ansible.builtin.get_url:
-    url: "https://services.gradle.org/distributions/gradle-{{ gradle_version }}-bin.zip"
-    dest: "/tmp/gradle-{{ gradle_version }}-bin.zip"
-    mode: '0644'
+    - name: Java - download gradle
+      ansible.builtin.get_url:
+        url: "https://services.gradle.org/distributions/gradle-{{ gradle_version | default('8.14') }}-bin.zip"
+        dest: "/tmp/gradle-{{ gradle_version | default('8.14') }}-bin.zip"
+        mode: '0644'
 
-- name: Java - create gradle directory
-  become: true
-  ansible.builtin.file:
-    path: /opt/gradle
-    state: directory
-    mode: '0755'
+    - name: Java - create gradle directory
+      ansible.builtin.file:
+        path: /opt/gradle
+        state: directory
+        mode: '0755'
 
-- name: Java - extract gradle
-  become: true
-  ansible.builtin.unarchive:
-    src: "/tmp/gradle-{{ gradle_version }}-bin.zip"
-    dest: /opt/gradle
-    remote_src: true
-    creates: "/opt/gradle/gradle-{{ gradle_version }}"
+    - name: Java - extract gradle
+      ansible.builtin.unarchive:
+        src: "/tmp/gradle-{{ gradle_version | default('8.14') }}-bin.zip"
+        dest: /opt/gradle
+        remote_src: true
+        creates: "/opt/gradle/gradle-{{ gradle_version | default('8.14') }}"
 
-- name: Java - setup environment variables
-  become: true
-  ansible.builtin.copy:
-    dest: /etc/profile.d/java.sh
-    content: |
-      export JAVA_HOME=/etc/alternatives/java_sdk
-      export PATH=$PATH:/opt/gradle/gradle-{{ gradle_version }}/bin
-    mode: '0644'
+    - name: Java - setup environment variables
+      ansible.builtin.copy:
+        dest: /etc/profile.d/java.sh
+        content: |
+          export JAVA_HOME=/etc/alternatives/java_sdk
+          export PATH=$PATH:/opt/gradle/gradle-{{ gradle_version | default('8.14') }}/bin
+        mode: '0644'
+
+- name: Java - macOS installation
+  when: ansible_facts['os_family'] == 'Darwin'
+  block:
+    - name: Java - install OpenJDK and Gradle via Homebrew
+      community.general.homebrew:
+        name:
+          - openjdk@21
+          - gradle
+        state: present
+
+    - name: Java - symlink openjdk for macOS
+      become: true
+      ansible.builtin.file:
+        src: "/opt/homebrew/opt/openjdk@21/libexec/openjdk.jdk"
+        dest: "/Library/Java/JavaVirtualMachines/openjdk-21.jdk"
+        state: link
