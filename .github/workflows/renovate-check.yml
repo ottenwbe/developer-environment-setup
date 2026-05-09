@@ -1,9 +1,9 @@
 name: Renovate Bot
 
 on:
-  # schedule:
+  schedule:
     # Run every day at 03:00 UTC to check for updates
-    # - cron: '0 3 * * *'
+    - cron: '0 3 * * *'
   workflow_dispatch:
 
 permissions:
@@ -40,3 +40,5 @@ jobs:
           fi
           echo "#### What was checked:" >> $GITHUB_STEP_SUMMARY
           echo "- **GitHub Actions**: Standard actions like \`actions/checkout\` and \`renovatebot/github-action\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Fedora Versions**: Matrix in \`main.yml\` and \`Dockerfile.fedora\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Gradle & IntelliJ**: Version variables in Ansible defaults" >> $GITHUB_STEP_SUMMARY
