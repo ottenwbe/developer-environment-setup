@@ -1,25 +1,55 @@
 ---
-- name: Vscode - add repo
+- name: Vscode - Linux installation
   become: true
-  ansible.builtin.yum_repository:
-    name: code
-    description: Visual Studio Code
-    gpgcheck: true
-    enabled: true
-    file: vscode
-    gpgkey: https://packages.microsoft.com/keys/microsoft.asc
-    baseurl: https://packages.microsoft.com/yumrepos/vscode
-- name: Vscode - install
-  become: true
-  ansible.builtin.dnf:
-    name:
-      - code
+  when: ansible_facts['os_family'] == 'RedHat'
+  block:
+    - name: Vscode - add repo
+      ansible.builtin.yum_repository:
+        name: code
+        description: Visual Studio Code
+        gpgcheck: true
+        enabled: true
+        file: vscode
+        gpgkey: https://packages.microsoft.com/keys/microsoft.asc
+        baseurl: https://packages.microsoft.com/yumrepos/vscode
+
+    - name: Vscode - install
+      ansible.builtin.dnf:
+        name:
+          - code
+        state: present
+
+- name: Vscode - macOS installation
+  community.general.homebrew_cask:
+    name: visual-studio-code
     state: present
+  when: ansible_facts['os_family'] == 'Darwin'
+
+- name: Vscode - Ensure /usr/local/bin exists
+  become: true
+  ansible.builtin.file:
+    path: /usr/local/bin
+    state: directory
+    mode: '0755'
+  when: ansible_facts['os_family'] == 'Darwin'
+
+- name: Vscode - Create symlink for CLI on macOS
+  become: true
+  ansible.builtin.file:
+    src: "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code"
+    dest: "/usr/local/bin/code"
+    state: link
+  when: ansible_facts['os_family'] == 'Darwin'
+
+- name: Vscode - Set binary path fact
+  ansible.builtin.set_fact:
+    vscode_bin: "{{ '/usr/local/bin/code' if ansible_facts['os_family'] == 'Darwin' else 'code' }}"
+
 - name: Vscode - install extensions
   become: true
   become_user: "{{ item.0.username }}"
   ansible.builtin.command:
-    cmd: "code --install-extension {{ item.1 }}"
+    cmd: "\"{{ vscode_bin }}\" --install-extension {{ item.1 }}"
   loop: "{{ users | product(vscode_extensions) | list }}"
   register: vscode_ext_install
   changed_when: "'successfully installed' in vscode_ext_install.stdout"

@@ -5,18 +5,40 @@
     name: dnf-plugins-core
     state: present
 
+- name: Download RPM Fusion free GPG key
+  ansible.builtin.get_url:
+    url: "https://rpmfusion.org/keys?action=AttachFile&do=get&target=RPM-GPG-KEY-rpmfusion-free-fedora-2020"
+    dest: /tmp/RPM-GPG-KEY-rpmfusion-free
+    mode: '0644'
+    timeout: 30
+  register: _download_free_key
+  until: _download_free_key is success
+  retries: 5
+  delay: 5
+
 - name: Import RPM Fusion free GPG key
   become: true
   ansible.builtin.rpm_key:
     state: present
-    key: https://rpmfusion.org/keys?action=AttachFile&do=get&target=RPM-GPG-KEY-rpmfusion-free-fedora-2020
+    key: /tmp/RPM-GPG-KEY-rpmfusion-free
     fingerprint: E9A4 91A3 DE24 7814 E7E0 67EA E06F 8ECD D651 FF2E
+
+- name: Download RPM Fusion nonfree GPG key
+  ansible.builtin.get_url:
+    url: "https://rpmfusion.org/keys?action=AttachFile&do=get&target=RPM-GPG-KEY-rpmfusion-nonfree-fedora-2020"
+    dest: /tmp/RPM-GPG-KEY-rpmfusion-nonfree
+    mode: '0644'
+    timeout: 30
+  register: _download_nonfree_key
+  until: _download_nonfree_key is success
+  retries: 5
+  delay: 5
 
 - name: Import RPM Fusion nonfree GPG key
   become: true
   ansible.builtin.rpm_key:
     state: present
-    key: https://rpmfusion.org/keys?action=AttachFile&do=get&target=RPM-GPG-KEY-rpmfusion-nonfree-fedora-2020
+    key: /tmp/RPM-GPG-KEY-rpmfusion-nonfree
     fingerprint: 79BD B88F 9BBF 7391 0FD4 095B 6A2A F961 9484 3C65
 
 - name: Get Fedora Version

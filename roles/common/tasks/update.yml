@@ -5,5 +5,8 @@
     name: "*"
     state: latest
     update_cache: true
+  environment:
+    LANG: C
+    LC_ALL: C
   tags:
     - update

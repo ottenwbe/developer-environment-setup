@@ -13,18 +13,31 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-
-  # This workflow contains a single job called "build"
-  build:
+  test-fedora:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     strategy:
       matrix:
         fedora_version: [43]
-    
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
       - name: Test Deployment Fedora ${{ matrix.fedora_version }}
         # some roles are skipped for efficiency of the github workflow, local test should still be executed with "all"
         run: test/test.sh ${{ matrix.fedora_version }} "user,zsh,ansible,common,go,java,ruby,cpp,python"
+
+  test-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Ansible
+        run: pip3 install --break-system-packages ansible
+      - name: Run Playbook
+        run: |
+          # Create a temporary inventory to target the runner host
+          echo "[MacOS]" > inventory.ci
+          echo "localhost ansible_connection=local" >> inventory.ci
+          
+          ansible-playbook -i inventory.ci site-mac.yml \
+            --extra-vars '{"users": [{"username": "runner"}]}' \
+            --tags "user,homebrew,zsh,ansible"

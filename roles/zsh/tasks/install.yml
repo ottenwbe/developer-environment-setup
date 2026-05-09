@@ -1,12 +1,37 @@
 ---
-- name: Zsh - install zsh, fonts, and dependencies
+- name: Zsh - Linux installation
+  when: ansible_facts['os_family'] == 'RedHat'
   become: true
-  ansible.builtin.package:
-    name:
-      - curl
-      - git
-      - zsh
-      - powerline
-      - powerline-fonts
-      - fira-code-fonts
-    state: present
+  block:
+    - name: Zsh - install Linux dependencies
+      ansible.builtin.dnf:
+        name:
+          - curl
+          - git
+          - zsh
+          - powerline
+        state: present
+
+    - name: Zsh - install Linux fonts
+      ansible.builtin.dnf:
+        name:
+          - powerline-fonts
+          - cascadia-code-fonts
+        state: present
+
+- name: Zsh - macOS installation
+  when: ansible_facts['os_family'] == 'Darwin'
+  block:
+    - name: Zsh - install macOS dependencies
+      community.general.homebrew:
+        name:
+          - curl
+          - git
+          - zsh
+        state: present
+
+    - name: Zsh - install macOS fonts
+      community.general.homebrew_cask:
+        name:
+          - font-cascadia-code
+        state: present
