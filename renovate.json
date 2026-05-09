@@ -26,14 +26,14 @@
       "customType": "regex",
       "managerFilePatterns": ["/^\\.github/workflows/.+\\.yml$/"],
       "matchStrings": [
-        "fedora_version: \\[(?<currentValue>.+?)\\]\\s*#\\s*renovate:\\s*datasource=(?<datasource>\\S+)\\s+depName=(?<depName>\\S+)"
+        "fedora_version: \\[(?<currentValue>.+?)\\]\\s*#\\s*renovate:\\s*datasource=(?<datasource>\\S+)\\s+depName=(?<depName>fedora)"
       ]
     },
     {
       "customType": "regex",
       "managerFilePatterns": ["/Dockerfile\\.fedora$/"],
       "matchStrings": [
-        "ARG FEDORA_VERSION=(?<currentValue>.+?)\\s*#\\s*renovate:\\s*datasource=(?<datasource>\\S+)\\s+depName=(?<depName>\\S+)"
+        "ARG FEDORA_VERSION=(?<currentValue>.+?)\\s*#\\s*renovate:\\s*datasource=(?<datasource>\\S+)\\s+depName=(?<depName>fedora)"
       ]
     }
   ]
