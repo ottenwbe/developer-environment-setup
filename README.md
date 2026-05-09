@@ -120,7 +120,9 @@ Create a `vars.json` file to customize your setup (e.g., users, git config, or s
       "git_name": "Your Name",
       "git_email": "email@example.com"
     }
-  ]
+  ],
+  "java_gradle_version": "9.5.0",
+  "java_cleanup_old_gradle": true
 }
 ```
 

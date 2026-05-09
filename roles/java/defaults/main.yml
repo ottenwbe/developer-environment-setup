@@ -3,4 +3,5 @@ java_packages:
   - java-21-openjdk-devel
   - maven
   - unzip
-gradle_version: "9.5.0"
+java_gradle_version: "9.5.0"
+java_cleanup_old_gradle: false

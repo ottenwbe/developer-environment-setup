@@ -11,8 +11,8 @@
 
     - name: Java - download gradle
       ansible.builtin.get_url:
-        url: "https://services.gradle.org/distributions/gradle-{{ gradle_version | default('8.14') }}-bin.zip"
-        dest: "/tmp/gradle-{{ gradle_version | default('8.14') }}-bin.zip"
+        url: "https://services.gradle.org/distributions/gradle-{{ java_gradle_version }}-bin.zip"
+        dest: "/tmp/gradle-{{ java_gradle_version }}-bin.zip"
         mode: '0644'
 
     - name: Java - create gradle directory
@@ -23,17 +23,41 @@
 
     - name: Java - extract gradle
       ansible.builtin.unarchive:
-        src: "/tmp/gradle-{{ gradle_version | default('8.14') }}-bin.zip"
+        src: "/tmp/gradle-{{ java_gradle_version }}-bin.zip"
         dest: /opt/gradle
         remote_src: true
-        creates: "/opt/gradle/gradle-{{ gradle_version | default('8.14') }}"
+        creates: "/opt/gradle/gradle-{{ java_gradle_version }}"
+
+    - name: Java - find old gradle versions
+      ansible.builtin.find:
+        paths: /opt/gradle
+        file_type: directory
+        patterns: 'gradle-*'
+        excludes: "gradle-{{ java_gradle_version }}"
+      register: java_old_gradle_versions
+
+    - name: Java - remove old gradle versions
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: absent
+      loop: "{{ java_old_gradle_versions.files }}"
+      when: java_cleanup_old_gradle | default(false)
+
+    - name: Java - create active symlink
+      ansible.builtin.file:
+        src: "/opt/gradle/gradle-{{ java_gradle_version }}"
+        dest: /opt/gradle/active
+        state: link
 
     - name: Java - setup environment variables
       ansible.builtin.copy:
         dest: /etc/profile.d/java.sh
         content: |
           export JAVA_HOME=/etc/alternatives/java_sdk
-          export PATH=$PATH:/opt/gradle/gradle-{{ gradle_version | default('8.14') }}/bin
+          case ":${PATH}:" in
+              *:/opt/gradle/active/bin:*) ;;
+              *) export PATH="/opt/gradle/active/bin:${PATH}" ;;
+          esac
         mode: '0644'
 
 - name: Java - macOS installation
