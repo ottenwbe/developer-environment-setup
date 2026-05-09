@@ -2,8 +2,8 @@ name: Renovate Bot
 
 on:
   schedule:
-    # Run every day at 03:00 UTC to check for updates
-    - cron: '0 3 * * *'
+    # Run every week on Sunday at 03:00 UTC
+    - cron: '0 3 * * 0'
   workflow_dispatch:
 
 permissions:

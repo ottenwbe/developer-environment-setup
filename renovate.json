@@ -8,6 +8,12 @@
     "enabled": false
   },
   "prHourlyLimit": 0,
+  "packageRules": [
+    {
+      "matchPackageNames": ["idea", "gradle"],
+      "groupName": "Java Development Tools"
+    }
+  ],
   "customManagers": [
     {
       "customType": "regex",
