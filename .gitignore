@@ -12,6 +12,8 @@ cid
 
 # User variables
 vars.json
+vars-mac.json
+vars-linux.json
 
 # Python virtual environment
 .venv/

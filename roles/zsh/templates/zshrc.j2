@@ -7,7 +7,7 @@ fi
 
 export PATH=$HOME/bin:$HOME/.local/bin:$PATH
 
-export ZSH=/home/{{ item.username }}/.oh-my-zsh
+export ZSH="{{ user_home_base_dir }}/{{ item.username }}/.oh-my-zsh"
 
 ZSH_THEME="powerlevel10k/powerlevel10k" # see https://github.com/romkatv/powerlevel10k
 
@@ -37,7 +37,9 @@ plugins=(
   docker
   kubectl
   nmap
+{% if ansible_facts['os_family'] == 'RedHat' %}
   systemd
+{% endif %}
 )
 
 source $ZSH/oh-my-zsh.sh
