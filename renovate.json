@@ -4,28 +4,30 @@
     "config:recommended"
   ],
   "onboarding": false,
-  "vulnerabilityAlerts": false,
+  "vulnerabilityAlerts": {
+    "enabled": false
+  },
   "prHourlyLimit": 0,
   "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": ["defaults/main\\.yml$"],
+      "managerFilePatterns": ["/defaults/main\\.yml$/"],
       "matchStrings": [
-        "(?<variableName>[a-zA-Z0-9_]+_version):\\s*['\"](?<currentValue>.+?)['\"]\\s*#\\s*renovate:\\s*datasource=(?<datasource>[^\\s]+)\\s+depName=(?<depName>[^\\s]+)(?:\\s+versioning=(?<versioning>[^\\s]+))?"
+        "(?<variableName>[a-zA-Z0-9_]+_version):\\s*['\"](?<currentValue>.+?)['\"]\\s*#\\s*renovate:\\s*datasource=(?<datasource>\\S+)\\s+depName=(?<depName>\\S+)(?:\\s+versioning=(?<versioning>\\S+))?"
       ]
     },
     {
       "customType": "regex",
-      "fileMatch": ["^\\.github/workflows/.+\\.yml$"],
+      "managerFilePatterns": ["/^\\.github/workflows/.+\\.yml$/"],
       "matchStrings": [
-        "fedora_version: \\[(?<currentValue>.+?)\\]\\s*#\\s*renovate:\\s*datasource=(?<datasource>[^\\s]+)\\s+depName=(?<depName>[^\\s]+)"
+        "fedora_version: \\[(?<currentValue>.+?)\\]\\s*#\\s*renovate:\\s*datasource=(?<datasource>\\S+)\\s+depName=(?<depName>\\S+)"
       ]
     },
     {
       "customType": "regex",
-      "fileMatch": ["Dockerfile\\.fedora$"],
+      "managerFilePatterns": ["/Dockerfile\\.fedora$/"],
       "matchStrings": [
-        "ARG FEDORA_VERSION=(?<currentValue>.+?)\\s*#\\s*renovate:\\s*datasource=(?<datasource>[^\\s]+)\\s+depName=(?<depName>[^\\s]+)"
+        "ARG FEDORA_VERSION=(?<currentValue>.+?)\\s*#\\s*renovate:\\s*datasource=(?<datasource>\\S+)\\s+depName=(?<depName>\\S+)"
       ]
     }
   ]
