@@ -31,7 +31,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install Ansible
-        run: pip3 install ansible
+        run: pip3 install --break-system-packages ansible
       - name: Run Playbook
         run: |
           # Create a temporary inventory to target the runner host
