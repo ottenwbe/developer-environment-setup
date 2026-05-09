@@ -5,7 +5,7 @@
   block:
     - name: Java - install packages
       ansible.builtin.dnf:
-        name: "{{ java_packages | default(['java-21-openjdk-devel']) }}"
+        name: "{{ java_packages | default(['java-25-openjdk-devel']) }}"
         state: present
         update_cache: true
 
@@ -66,13 +66,13 @@
     - name: Java - install OpenJDK and Gradle via Homebrew
       community.general.homebrew:
         name:
-          - openjdk@21
+          - openjdk@25
           - gradle
         state: present
 
     - name: Java - symlink openjdk for macOS
       become: true
       ansible.builtin.file:
-        src: "/opt/homebrew/opt/openjdk@21/libexec/openjdk.jdk"
-        dest: "/Library/Java/JavaVirtualMachines/openjdk-21.jdk"
+        src: "/opt/homebrew/opt/openjdk@25/libexec/openjdk.jdk"
+        dest: "/Library/Java/JavaVirtualMachines/openjdk-25.jdk"
         state: link

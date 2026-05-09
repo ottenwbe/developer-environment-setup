@@ -1,6 +1,6 @@
 ---
 java_packages:
-  - java-21-openjdk-devel
+  - java-25-openjdk-devel
   - maven
   - unzip
 java_gradle_version: "9.5.0"

@@ -42,3 +42,20 @@
     name: "{{ item.username }}"
     shell: /bin/zsh
   loop: "{{ users }}"
+
+- name: Zsh - add Go environment variables to .zshrc
+  become: true
+  become_user: "{{ item.username }}"
+  ansible.builtin.blockinfile:
+    path: "{{ zsh_user_home_base_dir }}/{{ item.username }}/.zshrc"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK - GO ENVIRONMENT"
+    block: |
+      # Go environment variables
+      export GOPATH="$HOME/go"
+      case ":${PATH}:" in
+          *:${GOPATH}/bin:*) ;;
+          *) export PATH="${GOPATH}/bin:${PATH}" ;;
+      esac
+    insertafter: EOF
+    state: present
+  loop: "{{ users }}"

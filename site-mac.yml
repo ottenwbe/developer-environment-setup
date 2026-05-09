@@ -26,3 +26,5 @@
   roles:
     - role: java
       tags: java
+    - role: go
+      tags: go

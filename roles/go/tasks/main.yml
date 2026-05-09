@@ -1,12 +1,31 @@
 ---
-- name: Go - install package
+- name: Go - install package (Fedora)
   become: true
   ansible.builtin.dnf:
     name: golang
     state: present
+  when: ansible_facts['os_family'] == 'RedHat'
+
+- name: Go - install package (macOS)
+  community.general.homebrew:
+    name: go
+    state: present
+  when: ansible_facts['os_family'] == 'Darwin'
+
+- name: Go - ensure GOPATH directory exists
+  become: true
+  become_user: "{{ item.username }}"
+  ansible.builtin.file:
+    path: "~/go"
+    state: directory
+    mode: '0755'
+  loop: "{{ users }}"
+
 - name: Go - install tools
   become: true
   become_user: "{{ item.0.username }}"
   ansible.builtin.command: "go install {{ item.1 }}"
+  environment:
+    PATH: "/opt/homebrew/bin:/usr/local/bin:{{ ansible_facts['env']['PATH'] | default('/usr/bin:/bin') }}"
   changed_when: false
   loop: "{{ users | product(go_tools) | list }}"
