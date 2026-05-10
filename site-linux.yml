@@ -2,7 +2,10 @@
 - name: System Setup
   hosts: Fedora
   tags: system
-  gather_facts: true
+  pre_tasks:
+    - name: Gather facts
+      ansible.builtin.setup:
+      tags: always
   roles:
     - role: user
       tags: user
@@ -18,7 +21,10 @@
 - name: Development Environment
   hosts: Fedora
   tags: dev
-  gather_facts: true
+  pre_tasks:
+    - name: Gather facts
+      ansible.builtin.setup:
+      tags: always
   roles:
     - role: go
       tags: go
@@ -36,7 +42,10 @@
 - name: IDEs
   hosts: Fedora
   tags: ides
-  gather_facts: true
+  pre_tasks:
+    - name: Gather facts
+      ansible.builtin.setup:
+      tags: always
   roles:
     - role: vscode
       tags: vscode
@@ -46,7 +55,10 @@
 - name: Infrastructure
   hosts: Fedora
   tags: infra
-  gather_facts: true
+  pre_tasks:
+    - name: Gather facts
+      ansible.builtin.setup:
+      tags: always
   roles:
     - role: kubernetes
       tags: kubernetes

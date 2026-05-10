@@ -2,7 +2,10 @@
 - name: System Setup
   hosts: MacOS
   tags: system
-  gather_facts: true
+  pre_tasks:
+    - name: Gather facts
+      ansible.builtin.setup:
+      tags: always
   roles:
     - role: user
       tags: user
@@ -14,7 +17,10 @@
 - name: Development Environment
   hosts: MacOS
   tags: dev
-  gather_facts: true
+  pre_tasks:
+    - name: Gather facts
+      ansible.builtin.setup:
+      tags: always
   roles:
     - role: java
       tags: java
@@ -26,7 +32,10 @@
 - name: IDEs
   hosts: MacOS
   tags: ides
-  gather_facts: true
+  pre_tasks:
+    - name: Gather facts
+      ansible.builtin.setup:
+      tags: always
   roles:
     - role: vscode
       tags: vscode
@@ -34,7 +43,10 @@
 - name: Infrastructure
   hosts: MacOS
   tags: infra
-  gather_facts: true
+  pre_tasks:
+    - name: Gather facts
+      ansible.builtin.setup:
+      tags: always
   roles:
     - role: kubernetes
       tags: kubernetes
