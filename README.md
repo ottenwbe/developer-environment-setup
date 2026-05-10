@@ -181,7 +181,11 @@ Note: The [git config](https://git-scm.com/docs/git-config) is optionally update
 The playbooks use tags to allow running specific parts of the setup. 
 
 Available tags: 
+<<<<<<< HEAD
 * system: Runs all system setup roles (user, homebrew/common, bitwarden, system, zsh, ansible) 
+=======
+* system: Runs all system setup roles (user, homebrew/common, zsh, ansible, system) 
+>>>>>>> master
 * dev: Runs all development environment roles (go, java, ruby, cpp, python, ai) 
 * ides: Runs all IDE installation roles (vscode, intellij)
 * infra: Runs all infrastructure roles (kubernetes, virtualization)

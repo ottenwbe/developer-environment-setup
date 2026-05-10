@@ -1,5 +1,12 @@
 ---
-kubernetes_packages:
+# Packages for Fedora (RedHat family)
+kubernetes_fedora_packages:
   - kubernetes-client
   - helm
-  - podman
+
+# Packages for macOS (Darwin family)
+kubernetes_macos_packages:
+  - kubernetes-cli
+  - helm
+  - minikube
+  - argocd

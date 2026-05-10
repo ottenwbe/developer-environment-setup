@@ -9,25 +9,16 @@
   roles:
     - role: user
       tags: user
-    - role: zsh
-      tags: zsh
-    - role: vscode
-      tags: vscode
-    - role: ansible
-      tags: ansible
     - role: common
       tags: common
     - role: system
       tags: system
-<<<<<<< Updated upstream
-=======
     - role: flatpak
       tags: flatpak
     - role: zsh
       tags: zsh
     - role: ansible
       tags: ansible
->>>>>>> Stashed changes
 
 - name: Development Environment
   hosts: Fedora
@@ -47,11 +38,31 @@
       tags: cpp
     - role: python
       tags: python
+    - role: ai
+      tags: ai
+
+- name: IDEs
+  hosts: Fedora
+  tags: ides
+  pre_tasks:
+    - name: Gather facts
+      ansible.builtin.setup:
+      tags: always
+  roles:
+    - role: vscode
+      tags: vscode
+    - role: intellij
+      tags: intellij
+
+- name: Infrastructure
+  hosts: Fedora
+  tags: infra
+  pre_tasks:
+    - name: Gather facts
+      ansible.builtin.setup:
+      tags: always
+  roles:
     - role: kubernetes
       tags: kubernetes
     - role: virtualization
       tags: virtualization
-    - role: intellij
-      tags: intellij
-    - role: ai
-      tags: ai
