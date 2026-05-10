@@ -2,10 +2,6 @@
 - name: System Setup
   hosts: MacOS
   tags: system
-  pre_tasks:
-    - name: Gather facts
-      ansible.builtin.setup:
-      tags: always
   roles:
     - role: user
       tags: user
@@ -13,18 +9,28 @@
       tags: homebrew
     - role: zsh
       tags: zsh
-    - role: vscode
-      tags: vscode
 
 - name: Development Environment
   hosts: MacOS
   tags: dev
-  pre_tasks:
-    - name: Gather facts
-      ansible.builtin.setup:
-      tags: always
   roles:
     - role: java
       tags: java
     - role: go
       tags: go
+    - role: python
+      tags: python
+
+- name: IDEs
+  hosts: MacOS
+  tags: ides
+  roles:
+    - role: vscode
+      tags: vscode
+
+- name: Infrastructure
+  hosts: MacOS
+  tags: infra
+  roles:
+    - role: kubernetes
+      tags: kubernetes

@@ -4,6 +4,13 @@
   ansible.builtin.dnf:
     name: podman
     state: present
+  when: ansible_facts['os_family'] == "RedHat"
+
+- name: Kubernetes - install docker on macOS
+  community.general.homebrew:
+    name: docker
+    state: present
+  when: ansible_facts['os_family'] == "Darwin"
 
 - name: Kubernetes - quiet podman-docker emulation message
   become: true
@@ -12,26 +19,36 @@
     dest: /etc/containers/nodocker
     force: false
     mode: '0644'
+  when: ansible_facts['os_family'] == "RedHat"
 
-- name: Kubernetes - install packages
+- name: Kubernetes - install packages on Fedora
   become: true
   ansible.builtin.dnf:
-    name: "{{ kubernetes_packages }}"
+    name: "{{ kubernetes_fedora_packages }}"
     state: present
+  when: ansible_facts['os_family'] == "RedHat"
 
-- name: Kubernetes - install minikube
+- name: Kubernetes - install packages on macOS
+  community.general.homebrew:
+    name: "{{ kubernetes_macos_packages }}"
+    state: present
+  when: ansible_facts['os_family'] == "Darwin"
+
+- name: Kubernetes - install minikube (Linux)
   become: true
   ansible.builtin.get_url:
     url: https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
     dest: /usr/local/bin/minikube
     mode: '0755'
+  when: ansible_facts['os_family'] == "RedHat"
 
-- name: Kubernetes - install argocd cli
+- name: Kubernetes - install argocd cli (Linux)
   become: true
   ansible.builtin.get_url:
     url: https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
     dest: /usr/local/bin/argocd
     mode: '0755'
+  when: ansible_facts['os_family'] == "RedHat"
 
 - name: Kubernetes - configure minikube driver
   become: true
@@ -39,6 +56,7 @@
   ansible.builtin.command: minikube config set driver podman
   loop: "{{ users }}"
   changed_when: false
+  when: ansible_facts['os_family'] == "RedHat"
 
 - name: Kubernetes - configure minikube rootless
   become: true
@@ -46,3 +64,4 @@
   ansible.builtin.command: minikube config set rootless true
   loop: "{{ users }}"
   changed_when: false
+  when: ansible_facts['os_family'] == "RedHat"
