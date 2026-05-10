@@ -1,6 +1,32 @@
 ---
-- name: Python - install packages
+- name: Python - install packages on Fedora
   become: true
   ansible.builtin.dnf:
-    name: "{{ python_packages }}"
+    name: "{{ python_fedora_packages }}"
     state: present
+  when: ansible_facts['os_family'] == "RedHat"
+
+- name: Python - install packages on macOS
+  community.general.homebrew:
+    name: "{{ python_macos_packages }}"
+    state: present
+  when: ansible_facts['os_family'] == "Darwin"
+
+- name: Python - install global pip packages
+  ansible.builtin.pip:
+    name: "{{ python_pip_packages }}"
+    state: present
+    executable: pip3
+  # Become true for Linux, but false for macOS Homebrew python to avoid permission issues
+  become: "{{ ansible_facts['os_family'] != 'Darwin' }}"
+  when:
+    - python_pip_packages is defined
+    - python_pip_packages | length > 0
+
+- name: Python - ensure ~/.local/bin is in PATH for user-installed tools
+  ansible.builtin.lineinfile:
+    path: "{{ '/Users' if ansible_facts['os_family'] == 'Darwin' else '/home' }}/{{ item.username }}/.zshrc"
+    line: 'export PATH="$HOME/.local/bin:$PATH"'
+    create: true
+    mode: '0644'
+  loop: "{{ users }}"

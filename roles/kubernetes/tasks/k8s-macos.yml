@@ -1,0 +1,10 @@
+---
+- name: Kubernetes - install docker on macOS
+  community.general.homebrew:
+    name: docker
+    state: present
+
+- name: Kubernetes - install packages on macOS
+  community.general.homebrew:
+    name: "{{ kubernetes_macos_packages }}"
+    state: present

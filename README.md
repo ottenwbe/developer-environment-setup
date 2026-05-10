@@ -138,7 +138,8 @@ To keep the default values for any configuration, simply omit that key from your
     "cmake",
     "ninja-build"
   ],
-  "intellij_version": "2024.1",
+  "python_pip_packages": ["pylint", "black"],
+  "intellij_version": "2025.1",
   "intellij_create_symlink": true
 }
 ```
@@ -175,8 +176,10 @@ Note: The [git config](https://git-scm.com/docs/git-config) is optionally update
 The playbooks use tags to allow running specific parts of the setup. 
 
 Available tags: 
-* system: Runs all system setup roles (user, homebrew/common, zsh, vscode, ansible, system) 
-* dev: Runs all development environment roles (go, java, ruby, cpp, python, kubernetes, virtualization, intellij, ai) 
+* system: Runs all system setup roles (user, homebrew/common, zsh, ansible, system) 
+* dev: Runs all development environment roles (go, java, ruby, cpp, python, ai) 
+* ides: Runs all IDE installation roles (vscode, intellij)
+* infra: Runs all infrastructure roles (kubernetes, virtualization)
 * user: User creation and configuration 
 * homebrew: Homebrew package manager setup (macOS only)
 * zsh: ZSH shell setup 

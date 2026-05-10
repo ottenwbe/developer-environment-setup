@@ -13,8 +13,6 @@
       tags: homebrew
     - role: zsh
       tags: zsh
-    - role: vscode
-      tags: vscode
 
 - name: Development Environment
   hosts: MacOS
@@ -28,3 +26,27 @@
       tags: java
     - role: go
       tags: go
+    - role: python
+      tags: python
+
+- name: IDEs
+  hosts: MacOS
+  tags: ides
+  pre_tasks:
+    - name: Gather facts
+      ansible.builtin.setup:
+      tags: always
+  roles:
+    - role: vscode
+      tags: vscode
+
+- name: Infrastructure
+  hosts: MacOS
+  tags: infra
+  pre_tasks:
+    - name: Gather facts
+      ansible.builtin.setup:
+      tags: always
+  roles:
+    - role: kubernetes
+      tags: kubernetes

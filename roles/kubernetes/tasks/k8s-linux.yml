@@ -1,0 +1,48 @@
+---
+- name: Kubernetes - install podman
+  become: true
+  ansible.builtin.dnf:
+    name: podman
+    state: present
+
+- name: Kubernetes - quiet podman-docker emulation message
+  become: true
+  ansible.builtin.copy:
+    content: ""
+    dest: /etc/containers/nodocker
+    force: false
+    mode: '0644'
+
+- name: Kubernetes - install packages on Fedora
+  become: true
+  ansible.builtin.dnf:
+    name: "{{ kubernetes_fedora_packages }}"
+    state: present
+
+- name: Kubernetes - install minikube (Linux)
+  become: true
+  ansible.builtin.get_url:
+    url: https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+    dest: /usr/local/bin/minikube
+    mode: '0755'
+
+- name: Kubernetes - install argocd cli (Linux)
+  become: true
+  ansible.builtin.get_url:
+    url: https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+    dest: /usr/local/bin/argocd
+    mode: '0755'
+
+- name: Kubernetes - configure minikube driver
+  become: true
+  become_user: "{{ item.username }}"
+  ansible.builtin.command: minikube config set driver podman
+  loop: "{{ users }}"
+  changed_when: false
+
+- name: Kubernetes - configure minikube rootless
+  become: true
+  become_user: "{{ item.username }}"
+  ansible.builtin.command: minikube config set rootless true
+  loop: "{{ users }}"
+  changed_when: false
