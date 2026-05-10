@@ -6,7 +6,5 @@
   ansible.builtin.include_tasks: cli.yml
 - name: Common - include gui tasks
   ansible.builtin.include_tasks: gui.yml
-- name: Common - include flatpak tasks
-  ansible.builtin.include_tasks: flatpak.yml
 - name: Common - include chrome tasks
   ansible.builtin.include_tasks: chrome.yml
