@@ -19,6 +19,15 @@
       tags: common
     - role: system
       tags: system
+<<<<<<< Updated upstream
+=======
+    - role: flatpak
+      tags: flatpak
+    - role: zsh
+      tags: zsh
+    - role: ansible
+      tags: ansible
+>>>>>>> Stashed changes
 
 - name: Development Environment
   hosts: Fedora
