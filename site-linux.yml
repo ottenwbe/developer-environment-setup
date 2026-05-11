@@ -13,6 +13,8 @@
       tags: common
     - role: system
       tags: system
+    - role: flatpak
+      tags: flatpak
     - role: zsh
       tags: zsh
     - role: ansible

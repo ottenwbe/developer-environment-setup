@@ -23,3 +23,12 @@
     name: "{{ item }}"
     state: present
   loop: "{{ flatpak_packages }}"
+  when: not flatpak_install_defaults
+
+
+- name: Flatpak - install applications
+  become: true
+  community.general.flatpak:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ flatpak_additional_packages }}"

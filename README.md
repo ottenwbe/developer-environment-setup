@@ -25,6 +25,7 @@ Currently tested and supported:
 ├── roles/              // Roles to be executed by the playbook
 │   ├── common          // Installation of common tools, external repos (rpm-fusion...), etc. (Linux only)
 │   ├── user            // Creation of users (cross-platform)
+│   ├── flatpak         // Flatpak package management (Linux only)
 │   ├── homebrew        // Package manager setup (macOS only)
 │   ├── zsh             // Installation of zsh for each user (cross-platform)
 │   ├── vscode          // Installation of Visual Studio Code (cross-platform)
@@ -139,6 +140,10 @@ To keep the default values for any configuration, simply omit that key from your
     "ninja-build"
   ],
   "python_pip_packages": ["pylint", "black"],
+  "flatpak_install_defaults": true,
+  "flatpak_additional_packages": [
+    "com.brave.Browser"
+  ],
   "intellij_version": "2025.1",
   "intellij_create_symlink": true
 }
@@ -176,11 +181,12 @@ Note: The [git config](https://git-scm.com/docs/git-config) is optionally update
 The playbooks use tags to allow running specific parts of the setup. 
 
 Available tags: 
-* system: Runs all system setup roles (user, homebrew/common, zsh, ansible, system) 
+* system: Runs all system setup roles (user, homebrew/common, bitwarden, system, zsh, ansible) 
 * dev: Runs all development environment roles (go, java, ruby, cpp, python, ai) 
 * ides: Runs all IDE installation roles (vscode, intellij)
 * infra: Runs all infrastructure roles (kubernetes, virtualization)
 * user: User creation and configuration 
+* flatpak: Flatpak installation and package management (Linux only)
 * homebrew: Homebrew package manager setup (macOS only)
 * zsh: ZSH shell setup 
 * vscode: Visual Studio Code installation 

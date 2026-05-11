@@ -1,0 +1,10 @@
+---
+# defaults file for flatpak
+flatpak_packages:
+  - org.kde.krita
+  - org.kde.okular
+  - org.keepassxc.KeePassXC
+# defaults file for flatpak
+
+flatpak_additional_packages: []
+flatpak_install_defaults: true
