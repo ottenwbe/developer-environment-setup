@@ -1,0 +1,15 @@
+---
+- name: Cpp - install packages on Fedora
+  become: true
+  ansible.builtin.dnf:
+    name: "{{ (cpp_fedora_default_packages + cpp_packages) | unique if cpp_install_defaults | bool else cpp_packages }}"
+    state: present
+
+- name: Cpp - install OpenGL development packages on Fedora
+  become: true
+  ansible.builtin.dnf:
+    name: "{{ cpp_opengl_packages_fedora }}"
+    state: present
+  when: cpp_install_opengl | bool
+
+# Add any other Linux-specific Cpp tasks here
