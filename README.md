@@ -2,6 +2,7 @@
 
 [![Test Developer Environment Setup](https://github.com/ottenwbe/developer-environment-setup/actions/workflows/main.yml/badge.svg)](https://github.com/ottenwbe/developer-environment-setup/actions/workflows/main.yml)
 [![Ansible](https://img.shields.io/badge/Ansible-2.15+-EE0000?style=flat&logo=ansible)](https://www.ansible.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 This ansible playbook is used by me to automate the setup of my developer machines on both Linux and macOS. 
 If you frequently reinstall your system, you know why these scripts were created.
@@ -133,12 +134,8 @@ To keep the default values for any configuration, simply omit that key from your
   "go_tools": [
     "github.com/onsi/ginkgo/v2/ginkgo@latest"
   ],
-  "cpp_packages": [
-    "clang",
-    "gcc",
-    "cmake",
-    "ninja-build"
-  ],
+  "cpp_install_defaults": true,
+  "cpp_packages": ["clang"],
   "python_pip_packages": ["pylint", "black"],
   "flatpak_install_defaults": true,
   "flatpak_additional_packages": [

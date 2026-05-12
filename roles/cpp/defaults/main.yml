@@ -1,8 +1,10 @@
 ---
-cpp_packages:
-  - clang
+# Packages for Fedora (RedHat family)
+cpp_fedora_default_packages:
   - gcc
   - make
+  - g++
+  - clang
   - cmake
   - valgrind
   - doxygen
@@ -13,3 +15,27 @@ cpp_packages:
   - cppcheck
   - conan
   - ccache
+
+# Packages for macOS (Darwin family)
+cpp_macos_default_packages:
+  - llvm # Provides clang, clang++
+  - cmake
+  - ninja
+  - conan
+
+# OpenGL development packages
+cpp_install_opengl: false
+cpp_opengl_packages_fedora:
+  - mesa-libGL-devel
+  - mesa-libGLU-devel
+  - glfw-devel
+  - glew-devel
+  - glm-devel
+cpp_opengl_packages_macos:
+  - glfw
+  - glew
+  - glm
+
+# Override this list in vars.json to install custom Cpp packages on both platforms
+cpp_packages: []
+cpp_install_defaults: true
