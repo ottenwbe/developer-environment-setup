@@ -1,6 +1,8 @@
 ---
-- name: Cpp - install packages
-  become: true
-  ansible.builtin.dnf:
-    name: "{{ cpp_packages }}"
-    state: present
+- name: Cpp - Load Linux tasks
+  ansible.builtin.include_tasks: cpp-linux.yml
+  when: ansible_facts['os_family'] == "RedHat"
+
+- name: Cpp - Load macOS tasks
+  ansible.builtin.include_tasks: cpp-macos.yml
+  when: ansible_facts['os_family'] == 'Darwin'

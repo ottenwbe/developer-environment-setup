@@ -26,6 +26,8 @@
       tags: java
     - role: go
       tags: go
+    - role: cpp
+      tags: cpp
     - role: python
       tags: python
 

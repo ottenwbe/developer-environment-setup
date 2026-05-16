@@ -40,4 +40,4 @@ jobs:
           
           ansible-playbook -i inventory.ci site-mac.yml \
             --extra-vars '{"users": [{"username": "runner"}]}' \
-            --tags "user,homebrew,zsh,ansible,python"
+            --tags "user,homebrew,zsh,ansible,python,cpp"
