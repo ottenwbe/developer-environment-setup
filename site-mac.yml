@@ -13,6 +13,8 @@
       tags: homebrew
     - role: zsh
       tags: zsh
+    - role: ansible
+      tags: ansible
 
 - name: Development Environment
   hosts: MacOS
