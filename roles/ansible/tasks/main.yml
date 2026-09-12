@@ -1,18 +1,8 @@
 ---
-- name: Ansible - install ansible and linting tools
-  become: true
-  ansible.builtin.dnf:
-    name:
-      - ansible
-      - ansible-lint
-      - yamllint
-    state: present
-- name: Ansible - create default directory structure
-  become: true
-  ansible.builtin.file:
-    path: "/home/{{ item.0.username }}/.ansible/{{ item.1 }}"
-    state: directory
-    owner: "{{ item.0.username }}"
-    group: "{{ item.0.username }}"
-    mode: '0755'
-  loop: "{{ users | product(['roles', 'collections']) | list }}"
+- name: Ansible - Load Linux tasks
+  ansible.builtin.include_tasks: linux.yml
+  when: ansible_facts['os_family'] == "RedHat"
+
+- name: Ansible - Load macOS tasks
+  ansible.builtin.include_tasks: macos.yml
+  when: ansible_facts['os_family'] == "Darwin"

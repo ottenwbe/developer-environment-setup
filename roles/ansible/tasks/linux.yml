@@ -1,0 +1,20 @@
+---
+- name: Ansible - install packages on Fedora
+  become: true
+  ansible.builtin.dnf:
+    name:
+      - ansible
+      - ansible-lint
+      - yamllint
+    state: present
+
+- name: Ansible - create default directory structure
+  become: true
+  become_user: "{{ item.0.username }}"
+  ansible.builtin.file:
+    path: "/home/{{ item.0.username }}/.ansible/{{ item.1 }}"
+    state: directory
+    owner: "{{ item.0.username }}"
+    group: "{{ item.0.username }}"
+    mode: '0755'
+  loop: "{{ users | product(['roles', 'collections']) | list }}"
