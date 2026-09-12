@@ -18,32 +18,37 @@ Currently tested and supported:
 
 ```
 .
-├── bootstrap_local.sh  // Script to bootstrap the ansible environment (Linux only)
-├── site-linux.yml      // Playbook for Fedora/Linux setup
-├── site-mac.yml        // Playbook for macOS setup
-├── inventory.local.yml // Local inventory (not versioned, add to .gitignore)
-├── ... 
-├── roles/              // Roles to be executed by the playbook
-│   ├── common          // Installation of common tools, external repos (rpm-fusion...), etc. (Linux only)
-│   ├── user            // Creation of users (cross-platform)
-│   ├── flatpak         // Flatpak package management (Linux only)
-│   ├── homebrew        // Package manager setup (macOS only)
-│   ├── zsh             // Installation of zsh for each user (cross-platform)
-│   ├── vscode          // Installation of Visual Studio Code (cross-platform)
-│   ├── ansible         // Installation of Ansible and linting tools (cross-platform)
-│   ├── cpp             // Everything needed for C(pp) development (cross-platform)
-│   ├── go              // Everything needed for Golang development (cross-platform)
-│   ├── java            // Everything needed for Java development (cross-platform)
-│   ├── kubernetes      // Everything needed for Kubernetes development (cross-platform)
-│   ├── python          // Everything needed for Python development (cross-platform)
-│   ├── ruby            // Everything needed for Ruby development (cross-platform)
-│   ├── virtualization  // Virtualization tools (cross-platform)
-│   ├── intellij        // Installation of IntelliJ IDEA (cross-platform)
-│   ├── system          // System configuration (Linux only)
-│   └── ai              // AI tools (Ollama, PyTorch, Jupyter) (cross-platform)
-└── test/               // Test the playbook in docker images
+├── bootstrap_local.sh        // Script to bootstrap the ansible environment (Linux only)
+├── site-linux.yml            // Playbook for Fedora/Linux setup
+├── site-mac.yml               // Playbook for macOS setup
+├── inventory.example.yml      // Versioned inventory example (copy to start your own)
+├── requirements.txt          // Python/Ansible dependencies for the bootstrap script
+├── renovate.json             // Renovate configuration for dependency updates
+├── group_vars/all            // Group-wide variables (e.g. ansible_python_interpreter)
+├── .github/workflows/        // CI workflows (Fedora Docker + macOS runner)
+├── roles/                    // Roles to be executed by the playbook
+│   ├── common              // Installation of common tools, external repos (rpm-fusion...), etc. (Linux only)
+│   ├── user                // Creation of users (cross-platform)
+│   ├── flatpak             // Flatpak package management (Linux only)
+│   ├── homebrew            // Package manager setup (macOS only)
+│   ├── zsh                 // Installation of zsh for each user (cross-platform)
+│   ├── vscode              // Installation of Visual Studio Code (cross-platform)
+│   ├── ansible             // Installation of Ansible and linting tools (Linux only)
+│   ├── cpp                 // Everything needed for C(pp) development (cross-platform)
+│   ├── go                  // Everything needed for Golang development (cross-platform)
+│   ├── java                // Everything needed for Java development (cross-platform)
+│   ├── kubernetes          // Everything needed for Kubernetes development (cross-platform)
+│   ├── python              // Everything needed for Python development (cross-platform)
+│   ├── ruby                // Everything needed for Ruby development (Linux only)
+│   ├── virtualization      // Virtualization tools: VirtualBox, Vagrant (Linux only)
+│   ├── intellij            // Installation of IntelliJ IDEA (Linux only)
+│   ├── system              // System configuration (Linux only)
+│   └── ai                  // AI tools (Ollama, PyTorch, Jupyter) (Linux only)
+└── test/                 // Test the playbook in docker images
     └── docker/
 ```
+
+> Note: role cross-platform status reflects which playbooks run them. Roles implemented only with Linux primitives (`dnf`, `akmods`, `systemd`) and not present in `site-mac.yml` are listed as Linux only, even if they could be ported in the future.
 
 ## Usage 
 
@@ -55,11 +60,18 @@ git clone https://github.com/ottenwbe/developer-environment-setup.git
 
 ## Inventory Files
 
-Three inventory files are available:
+The repository ships one versioned inventory and expects you to create local ones (both are gitignored):
 
-- **`inventory.example.yml`** - Generic example showing supported OS groups and structure
-- **`inventory.localhost.yml`** - Local Fedora machine with `127.0.0.1` for testing (not versioned)
-- **`inventory.local.yml`** - For SSH connections to remote machines (not versioned, add to .gitignore)
+- **`inventory.example.yml`** - Versioned example showing supported OS groups and structure. Copy this as a starting point.
+- **`inventory.localhost.yml`** - Local machine inventory for testing on `127.0.0.1`/`ansible_connection: local`. **Not versioned** (create it yourself).
+- **`inventory.local.yml`** - Inventory for SSH connections to remote machines. **Not versioned** (create it yourself).
+
+To get started quickly, copy the example:
+
+```bash
+cp inventory.example.yml inventory.localhost.yml
+# edit inventory.localhost.yml to match your local hosts
+```
 
 ## Quick Start
 
@@ -75,9 +87,12 @@ This script will install Python, Ansible, and run the Fedora playbook locally.
 
 ### For Local macOS
 
-On macOS, ensure Ansible is installed, then run:
+On macOS, ensure Ansible is installed (e.g. `brew install ansible`), create a local inventory, then run the playbook:
 
 ```bash
+# Create a local inventory targeting the current machine
+cp inventory.example.yml inventory.localhost.yml
+
 ansible-playbook -i inventory.localhost.yml site-mac.yml --extra-vars @vars.json --ask-become-pass
 ```
 
@@ -141,34 +156,9 @@ To keep the default values for any configuration, simply omit that key from your
   "flatpak_additional_packages": [
     "com.brave.Browser"
   ],
-  "intellij_version": "2025.1",
+  "intellij_version": "2025.3.2",
   "intellij_create_symlink": true
 }
-```
-
-For both Fedora and macOS machines accessible over SSH, create an `inventory.local.yml` file (not versioned):
-
-```yaml
-all:
-  children:
-    Fedora:
-      hosts:
-        fedora-dev:
-          ansible_user: your_username
-    MacOS:
-      hosts:
-        macos-dev:
-          ansible_user: your_username
-```
-
-Then run the appropriate playbook:
-
-```bash
-# For Fedora machines
-ansible-playbook -i inventory.local.yml site-linux.yml --extra-vars '{"users": [{"username": "your user", "git_name": "Your Name", "git_email": "email@example.com"}]}' --ask-become-pass
-
-# For macOS machines
-ansible-playbook -i inventory.local.yml site-mac.yml --extra-vars '{"users": [{"username": "your user", "git_name": "Your Name", "git_email": "email@example.com"}]}' --ask-become-pass
 ```
 
 Note: The [git config](https://git-scm.com/docs/git-config) is optionally updated as well for the user.
@@ -178,7 +168,7 @@ Note: The [git config](https://git-scm.com/docs/git-config) is optionally update
 The playbooks use tags to allow running specific parts of the setup. 
 
 Available tags: 
-* system: Runs all system setup roles (user, homebrew/common, bitwarden, system, zsh, ansible) 
+* system: Runs all system setup roles (user, common/homebrew, system, zsh, ansible) 
 * dev: Runs all development environment roles (go, java, ruby, cpp, python, ai) 
 * ides: Runs all IDE installation roles (vscode, intellij)
 * infra: Runs all infrastructure roles (kubernetes, virtualization)
