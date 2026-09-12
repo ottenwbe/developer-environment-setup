@@ -4,6 +4,12 @@
 [![Ansible](https://img.shields.io/badge/Ansible-2.15+-EE0000?style=flat&logo=ansible)](https://www.ansible.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
+> **Note:** This repository was used to test [Vibe](https://mistral.ai) coding-agent capabilities. As part of that test, an autonomous agent reviewed the project and made two documentation-focused changes, each delivered via a separate pull request:
+> - **[PR #18](https://github.com/ottenwbe/developer-environment-setup/pull/18)** — Cleaned up this README: corrected the structure diagram (added missing top-level files, fixed cross-platform/Linux-only role labels), removed the stale `bitwarden` tag reference, clarified that only `inventory.example.yml` is versioned, removed a duplicated remote-SSH section, and aligned the `intellij_version` example with the role default.
+> - **[PR #19](https://github.com/ottenwbe/developer-environment-setup/pull/19)** — Added [`AGENTS.md`](AGENTS.md) with basic rules for AI coding in this repository (repo layout, cross-platform role conventions, module/tag/commit style, testing).
+>
+> The changes are documentation-only; no roles, playbooks, or scripts were modified, and both PRs passed CI (Fedora Docker + macOS runner).
+
 This ansible playbook is used by me to automate the setup of my developer machines on both Linux and macOS. 
 If you frequently reinstall your system, you know why these scripts were created.
 Therefore, this repository will be updated whenever I setup a new machine (commits to master).
